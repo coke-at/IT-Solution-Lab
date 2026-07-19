@@ -115,6 +115,47 @@
     }
   ];
 
+  const solutionCases = [
+    {
+      id: 'growth-enterprise-security-cloud-upgrade',
+      name: '成长型企业安全与云基础设施升级',
+      scenario: '综合方案',
+      status: '正在完善',
+      architectureReady: true,
+      stage: '架构与产品组合',
+      summary: '解决企业出口、远程访问、终端防护与云基础设施独立建设带来的管理和安全问题。',
+      audience: '成长型多分支企业',
+      templateType: '模板方案',
+      domains: ['网络', '安全', '云计算'],
+      background: '面向出口能力分散、远程访问缺少统一控制、终端与云平台独立运维的企业场景，建立可持续完善的方案模板。',
+      problems: ['边界安全风险缺少统一治理', '身份访问与远程接入控制不足', '终端威胁与安全运营相互割裂', '云基础设施资源交付与运维需要协同'],
+      objectives: ['统一出口与远程访问的安全控制', '建立终端防护与安全运营协同', '形成云基础设施的统一资源承载能力'],
+      constraints: ['现网拓扑、容量与兼容性需要结合具体客户环境确认', '产品授权、实施窗口与回退条件待进一步补充', '当前尚未形成真实部署验证证据'],
+      architecture: {
+        ingress: 'Internet / Branch',
+        securityProducts: ['af', 'atrust'],
+        core: 'Core Network',
+        serviceProducts: ['edr', 'hci', 'sip']
+      },
+      productReferences: [
+        { id: 'af', reason: '承担企业出口边界防护、访问控制与安全策略管理。', problem: '边界风险' },
+        { id: 'atrust', reason: '为远程办公和分支访问提供身份验证与最小权限控制。', problem: '身份与远程访问' },
+        { id: 'edr', reason: '补充服务器和办公终端的威胁检测、响应与持续防护。', problem: '终端威胁' },
+        { id: 'hci', reason: '整合计算、存储和虚拟网络，承载云基础设施资源交付。', problem: '资源弹性与运维' },
+        { id: 'sip', reason: '汇聚安全数据并支撑告警研判、事件处置与持续运营。', problem: '安全运营协同' }
+      ],
+      phases: [
+        { name: '规划', objective: '完成调研、范围、目标与风险梳理', status: '结构已建立', deliverable: '需求、范围与风险记录' },
+        { name: '部署', objective: '按业务影响分阶段上线并完成联调', status: '待进一步补充', deliverable: '实施与验证记录' },
+        { name: '优化', objective: '建立基线、运营方法与持续改进机制', status: '待进一步补充', deliverable: '优化与运营建议' }
+      ],
+      risks: ['具体性能、容量、License 与兼容性需以正式选型和厂商资料为准', '实施窗口、业务影响和回退方案需结合现网确认', '本模板不代表已经完成的客户交付或项目收益'],
+      currentState: '方案框架、逻辑架构和产品组合已经建立，需求约束、验证证据与交付边界仍在完善中。',
+      nextSteps: ['补充具体客户环境和约束条件', '完善容量、授权与兼容性核验', '通过实验记录补充架构与策略验证证据', '完善实施交付物和风险边界'],
+      presalesChecks: ['为什么现在要建设？', '方案如何对应业务问题？', '选择这些产品的依据是什么？', '如何实施、验证与持续运营？']
+    }
+  ];
+
   const futureVendors = [
     { name: '华为', focus: '网络、安全与云平台', code: 'HW' },
     { name: 'H3C', focus: '网络、云与安全', code: 'H3C' },
@@ -123,7 +164,7 @@
     { name: '天融信', focus: '边界与综合安全', code: 'TOP' }
   ];
 
-  window.itSolutionLab = { technologyDomains, productLabs, futureVendors, labExperiments };
+  window.itSolutionLab = { technologyDomains, productLabs, futureVendors, labExperiments, solutionCases };
 
   const pageTitles = {
     home: 'IT Solution Lab · 工程师成长实验室',
@@ -347,6 +388,120 @@
     renderLabExperiments();
   }
 
+  const solutionFilterState = { scenario: '全部', status: '全部' };
+
+  function getSolutionStatusClass(status) {
+    return ({ '需求梳理中': 'discovery', '架构已建立': 'architecture', '正在完善': 'improving', '已完成': 'completed' })[status] || 'neutral';
+  }
+
+  function getProductById(id) {
+    return productLabs.find(product => product.id === id);
+  }
+
+  function renderSolutionStats() {
+    const stats = document.querySelector('#solutionsStats');
+    if (!stats) return;
+    const values = [
+      [solutionCases.length, '方案总数'],
+      [solutionCases.filter(solution => solution.status === '正在完善').length, '正在完善'],
+      [solutionCases.filter(solution => solution.architectureReady).length, '已建立架构'],
+      [solutionCases.filter(solution => solution.status === '已完成').length, '已完成']
+    ];
+    stats.innerHTML = values.map(([value, label]) => `<div><b>${value}</b><span>${label}</span></div>`).join('');
+  }
+
+  function renderSolutionFilters() {
+    const scenarioFilters = document.querySelector('#solutionScenarioFilters');
+    const statusFilters = document.querySelector('#solutionStatusFilters');
+    if (!scenarioFilters || !statusFilters) return;
+    const scenarios = ['全部', ...new Set(solutionCases.map(solution => solution.scenario))];
+    const statuses = ['全部', ...new Set(solutionCases.map(solution => solution.status))];
+    scenarioFilters.innerHTML = scenarios.map(value => `<button class="${value === solutionFilterState.scenario ? 'active' : ''}" data-solution-scenario="${value}" aria-pressed="${value === solutionFilterState.scenario}">${value}</button>`).join('');
+    statusFilters.innerHTML = statuses.map(value => `<button class="${value === solutionFilterState.status ? 'active' : ''}" data-solution-status="${value}" aria-pressed="${value === solutionFilterState.status}">${value}</button>`).join('');
+  }
+
+  function renderSolutionCases() {
+    const grid = document.querySelector('#solutionsGrid');
+    if (!grid) return;
+    const filteredSolutions = solutionCases.filter(solution => {
+      const matchesScenario = solutionFilterState.scenario === '全部' || solution.scenario === solutionFilterState.scenario;
+      const matchesStatus = solutionFilterState.status === '全部' || solution.status === solutionFilterState.status;
+      return matchesScenario && matchesStatus;
+    });
+    const resultCount = document.querySelector('#solutionResultCount');
+    if (resultCount) resultCount.textContent = `共 ${filteredSolutions.length} 个方案`;
+    if (!filteredSolutions.length) {
+      grid.innerHTML = '<div class="solutions-empty-state"><b>暂无匹配方案</b><p>当前筛选条件下暂未整理方案内容。</p></div>';
+      return;
+    }
+    grid.innerHTML = filteredSolutions.map((solution, index) => `
+      <article class="solution-list-card">
+        <div class="solution-list-index"><span>${String(index + 1).padStart(2, '0')} / SOLUTION</span><em class="status-${getSolutionStatusClass(solution.status)}">${solution.status}</em></div>
+        <div class="solution-list-copy"><div class="solution-list-meta"><span>${solution.scenario}</span><i>${solution.templateType}</i></div><h3>${solution.name}</h3><p>${solution.summary}</p><small>适用对象 · ${solution.audience}</small></div>
+        <div class="solution-list-action"><small>当前阶段</small><strong>${solution.stage}</strong><div>${solution.domains.map(domain => `<span>${domain}</span>`).join('')}</div><button data-solution-open="${solution.id}">查看方案详情 <b>→</b></button></div>
+      </article>`).join('');
+  }
+
+  function solutionArchitectureTemplate(solution) {
+    const security = solution.architecture.securityProducts.map(id => getProductById(id)?.name || '产品信息待补充').join(' + ');
+    const services = solution.architecture.serviceProducts.map(id => {
+      const product = getProductById(id);
+      return `<div class="solution-arch-node"><small>${product?.category || '能力待补充'}</small><b>${product?.name || '产品信息待补充'}</b></div>`;
+    }).join('');
+    return `
+      <div class="solution-architecture-flow">
+        <div class="solution-arch-node"><small>外部接入</small><b>${solution.architecture.ingress}</b></div><i></i>
+        <div class="solution-arch-node security"><small>安全边界</small><b>${security}</b></div><i></i>
+        <div class="solution-arch-node core"><small>业务核心</small><b>${solution.architecture.core}</b></div><i></i>
+        <div class="solution-arch-branches">${services}</div>
+      </div>`;
+  }
+
+  function solutionProductsTemplate(solution) {
+    return solution.productReferences.map(reference => {
+      const product = getProductById(reference.id);
+      if (!product) {
+        return `<article class="solution-product-reference missing"><div><span>产品信息待补充</span><small>${reference.id}</small></div><p>${reference.reason || '该产品在方案中的使用原因待进一步补充。'}</p><em>${reference.problem || '问题类型待补充'}</em></article>`;
+      }
+      return `<article class="solution-product-reference"><div><span>${product.name}</span><small>${product.fullName} · ${product.category}</small></div><p>${reference.reason}</p><em>解决问题 · ${reference.problem}</em></article>`;
+    }).join('');
+  }
+
+  function solutionDetailTemplate(solution) {
+    const problems = solution.problems.map(item => `<li>${item}</li>`).join('');
+    const objectives = solution.objectives.map(item => `<li>${item}</li>`).join('');
+    const constraints = solution.constraints.map(item => `<li>${item}</li>`).join('');
+    const phases = solution.phases.map((phase, index) => `<li><b>${String(index + 1).padStart(2, '0')}</b><div><strong>${phase.name}</strong><p>${phase.objective}</p><span>${phase.status}</span><small>主要交付物 · ${phase.deliverable}</small></div></li>`).join('');
+    const risks = solution.risks.map(item => `<li>${item}</li>`).join('');
+    const nextSteps = solution.nextSteps.map(item => `<li>${item}</li>`).join('');
+    const presalesChecks = solution.presalesChecks.map(item => `<li>${item}</li>`).join('');
+    return `
+      <div class="solution-dialog-head"><span>${solution.scenario} / ${solution.templateType}</span><div><h2>${solution.name}</h2><em class="status-${getSolutionStatusClass(solution.status)}">${solution.status}</em></div><p>${solution.summary}</p><small>${solution.audience} · 当前阶段 ${solution.stage}</small><strong>尚未形成真实客户交付结果</strong></div>
+      <section class="solution-detail-overview"><article><span>01 / 客户背景</span><h3>当前场景</h3><p>${solution.background}</p></article><article><span>02 / 当前问题</span><h3>需要解决什么？</h3><ul>${problems}</ul></article></section>
+      <section class="solution-goals-constraints"><article><span>03 / 建设目标</span><h3>方案希望形成的能力</h3><ul>${objectives}</ul></article><article><span>04 / 需求与约束</span><h3>仍需确认的边界</h3><ul>${constraints}</ul></article></section>
+      <section class="solution-architecture-section"><div class="solution-detail-title"><span>05 / 总体架构</span><h3>从接入、安全边界到业务与基础设施</h3></div><div class="solution-architecture-board"><div class="board-head"><span>SOLUTION ARCHITECTURE</span><b>LOGICAL VIEW</b></div>${solutionArchitectureTemplate(solution)}</div></section>
+      <section class="solution-products-section"><div class="solution-detail-title"><span>06 / 产品与能力组合</span><h3>产品选择必须对应客户问题</h3></div><div class="solution-product-references">${solutionProductsTemplate(solution)}</div></section>
+      <section class="solution-phases-section"><div class="solution-detail-title"><span>07 / 建设阶段</span><h3>按顺序推进，不虚构项目日期</h3></div><ol class="solution-phase-list">${phases}</ol></section>
+      <section class="solution-risks-section"><div class="solution-detail-title"><span>08 / 风险与边界</span><h3>当前方案不代表完成交付</h3></div><ul>${risks}</ul></section>
+      <section class="solution-state-section"><article><span>09 / 当前完成状态</span><h3>正在完善</h3><p>${solution.currentState}</p></article><article><span>10 / 后续完善方向</span><h3>下一步工作</h3><ol>${nextSteps}</ol><div class="solution-presales-check"><small>售前检查</small><ul>${presalesChecks}</ul></div></article></section>`;
+  }
+
+  const solutionDialog = document.querySelector('#solutionDialog');
+  const solutionBody = document.querySelector('#solutionBody');
+
+  function openSolution(id) {
+    const solution = solutionCases.find(item => item.id === id);
+    if (!solution || !solutionDialog || !solutionBody) return;
+    solutionBody.innerHTML = solutionDetailTemplate(solution);
+    solutionDialog.showModal();
+  }
+
+  function renderSolutionsCenter() {
+    renderSolutionStats();
+    renderSolutionFilters();
+    renderSolutionCases();
+  }
+
   const productFilterState = { vendor: '全部', category: '全部' };
 
   function getProductGroup(product) {
@@ -409,6 +564,28 @@
   document.addEventListener('click', event => {
     const productButton = event.target.closest('[data-product-open]');
     if (productButton) openProductLab(productButton.dataset.productOpen);
+    const solutionButton = event.target.closest('[data-solution-open]');
+    if (solutionButton) openSolution(solutionButton.dataset.solutionOpen);
+    const solutionScenarioButton = event.target.closest('[data-solution-scenario]');
+    if (solutionScenarioButton) {
+      solutionFilterState.scenario = solutionScenarioButton.dataset.solutionScenario;
+      document.querySelectorAll('[data-solution-scenario]').forEach(button => {
+        const active = button === solutionScenarioButton;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      renderSolutionCases();
+    }
+    const solutionStatusButton = event.target.closest('[data-solution-status]');
+    if (solutionStatusButton) {
+      solutionFilterState.status = solutionStatusButton.dataset.solutionStatus;
+      document.querySelectorAll('[data-solution-status]').forEach(button => {
+        const active = button === solutionStatusButton;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      renderSolutionCases();
+    }
     const experimentButton = event.target.closest('[data-experiment-open]');
     if (experimentButton) openLabExperiment(experimentButton.dataset.experimentOpen);
     const directionButton = event.target.closest('[data-experiment-direction]');
@@ -455,11 +632,14 @@
 
   document.querySelector('[data-lab-close]')?.addEventListener('click', () => productDialog?.close());
   productDialog?.addEventListener('click', event => { if (event.target === productDialog) productDialog.close(); });
+  document.querySelector('[data-solution-close]')?.addEventListener('click', () => solutionDialog?.close());
+  solutionDialog?.addEventListener('click', event => { if (event.target === solutionDialog) solutionDialog.close(); });
   document.querySelector('[data-experiment-close]')?.addEventListener('click', () => labExperimentDialog?.close());
   labExperimentDialog?.addEventListener('click', event => { if (event.target === labExperimentDialog) labExperimentDialog.close(); });
 
   renderHomeContent();
   renderTechnologyMap();
+  renderSolutionsCenter();
   renderLabCenter();
   renderProductLabs();
   showPage(location.hash.slice(1) || 'home', { updateHash: false, scroll: false, instant: true });
