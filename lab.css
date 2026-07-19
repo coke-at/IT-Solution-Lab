@@ -144,7 +144,7 @@ button{color:inherit}
 .eyebrow{display:flex;align-items:center;gap:14px;color:var(--purple-2);font-size:9px}
 .eyebrow b{color:var(--muted);font-weight:500}
 .eyebrow b:before{content:'';display:inline-block;width:25px;height:1px;margin-right:14px;vertical-align:middle;background:var(--line-strong)}
-.hero-copy h1{margin:0 0 38px;font-size:118px;line-height:.84;letter-spacing:-.065em;font-weight:800}
+.hero-copy h1{margin:0 0 38px;font-size:clamp(72px,8vw,118px);line-height:.84;letter-spacing:-.065em;font-weight:800}
 .hero-copy h1 em{font-style:normal;background:linear-gradient(95deg,#c6b7ff 4%,#8b6dff 42%,#48a9ff 82%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero-positioning{margin:0;font-size:32px;line-height:1.35;letter-spacing:0;font-weight:700;color:var(--ink)}
 .hero-description{max-width:800px;margin:20px 0 0;color:var(--muted);font-size:17px;font-weight:500;line-height:1.9;letter-spacing:0}
@@ -279,7 +279,6 @@ html.light .vendor-map .vendor-card>button{color:var(--purple)!important}
 
 @media(max-width:1250px){
   .page-frame{padding-left:36px;padding-right:36px}
-  .hero-copy h1{font-size:96px}
   .product-lab-grid{grid-template-columns:repeat(2,1fr)}
   .template-strip{grid-template-columns:1fr}.template-strip ol{grid-template-columns:repeat(5,1fr)}
   .resources-page .vendor-map{grid-template-columns:repeat(2,1fr)}
