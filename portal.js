@@ -180,6 +180,32 @@
     };
   }
 
+  function renderHomeContent() {
+    const directionGrid = document.querySelector('#homeDirectionGrid');
+    const directionNames = { network: '网络', security: '安全', cloud: '云计算', solution: '解决方案架构' };
+    if (directionGrid) {
+      directionGrid.innerHTML = technologyDomains.map(domain => `
+        <article class="home-direction-card">
+          <small>${domain.title}</small>
+          <h3>${directionNames[domain.id]}</h3>
+          <p>${domain.summary}</p>
+          <button data-route="technology">进入技术地图 →</button>
+        </article>`).join('');
+    }
+
+    const productGrid = document.querySelector('#homeProductGrid');
+    const featuredProductIds = ['af', 'atrust', 'hci'];
+    if (productGrid) {
+      productGrid.innerHTML = productLabs.filter(product => featuredProductIds.includes(product.id)).map(product => `
+        <article class="home-product-card tone-${product.tone}">
+          <div class="home-product-head"><b>${product.name}</b><small>${product.category}</small></div>
+          <h3>${product.fullName}</h3>
+          <p>${product.positioning}</p>
+          <button data-product-open="${product.id}">打开学习模板 →</button>
+        </article>`).join('');
+    }
+  }
+
   function renderTechnologyMap() {
     const grid = document.querySelector('#technologyGrid');
     if (!grid) return;
@@ -256,6 +282,7 @@
   document.querySelector('[data-lab-close]')?.addEventListener('click', () => productDialog?.close());
   productDialog?.addEventListener('click', event => { if (event.target === productDialog) productDialog.close(); });
 
+  renderHomeContent();
   renderTechnologyMap();
   renderProductLabs();
   showPage(location.hash.slice(1) || 'home', { updateHash: false, scroll: false, instant: true });

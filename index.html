@@ -99,43 +99,57 @@
           </div>
         </section>
 
-        <section class="journey-section">
-          <div class="section-heading compact-heading">
-            <div><span>CAREER JOURNEY</span><h2>我的成长路线</h2></div>
-            <p>以真实交付经验为起点，持续补齐安全深度、客户沟通和架构设计能力。</p>
+        <section class="home-section journey-section">
+          <div class="home-section-heading">
+            <div><span>CAREER JOURNEY</span><h2>成长路线</h2></div>
+            <p>从真实交付出发，逐步建立安全能力、售前思维与架构视角。</p>
           </div>
           <div class="journey-track">
-            <article class="done"><b>01</b><i></i><div><small>FOUNDATION</small><h3>售后工程师</h3><p>交付、运维、排障</p></div></article>
-            <article class="current"><b>02</b><i></i><div><small>NOW</small><h3>安全技术专家</h3><p>体系化补齐安全能力</p></div></article>
-            <article><b>03</b><i></i><div><small>NEXT</small><h3>解决方案工程师</h3><p>场景分析、方案表达</p></div></article>
-            <article><b>04</b><i></i><div><small>TARGET</small><h3>Solution Architect</h3><p>端到端架构设计</p></div></article>
+            <article class="done"><b>01</b><div><small>DELIVERY</small><h3>售后工程师</h3></div></article>
+            <article class="current"><b>02</b><div><small>SECURITY</small><h3>安全工程师</h3></div></article>
+            <article><b>03</b><div><small>PRESALES</small><h3>售前工程师</h3></div></article>
+            <article><b>04</b><div><small>ARCHITECTURE</small><h3>解决方案架构师</h3></div></article>
           </div>
         </section>
 
-        <section class="overview-grid">
-          <article class="overview-card overview-progress">
-            <div class="card-label"><span>01</span><b>CURRENT FOCUS</b></div>
-            <h3>能力概览</h3>
-            <div class="mini-progress"><span>Security</span><i><b style="--level:72%"></b></i><em>72</em></div>
-            <div class="mini-progress"><span>Network</span><i><b style="--level:64%"></b></i><em>64</em></div>
-            <div class="mini-progress"><span>Cloud</span><i><b style="--level:43%"></b></i><em>43</em></div>
-            <div class="mini-progress"><span>Solution</span><i><b style="--level:35%"></b></i><em>35</em></div>
-            <button data-route="dashboard">查看成长 Dashboard →</button>
-          </article>
-          <article class="overview-card feature-card purple">
-            <div class="card-label"><span>02</span><b>PRODUCT LAB</b></div>
-            <div class="feature-icon">AF</div>
-            <h3>下一代防火墙<br>学习模板</h3>
-            <p>从网络配置、安全策略，到故障排查与售前思考。</p>
-            <button data-product-open="af">打开 AF 模板 →</button>
-          </article>
-          <article class="overview-card feature-card blue">
-            <div class="card-label"><span>03</span><b>LAB RECORD</b></div>
-            <div class="topology-thumb" aria-hidden="true"><i>WEB</i><b>AF</b><span>CORE</span><em>SRV</em></div>
-            <h3>企业出口安全模拟</h3>
-            <p>用实验验证拓扑、策略、NAT、日志和故障排查路径。</p>
-            <button data-route="labs">查看实验框架 →</button>
-          </article>
+        <section class="home-section home-directions">
+          <div class="home-section-heading">
+            <div><span>LEARNING DOMAINS</span><h2>学习方向</h2></div>
+            <p>围绕企业 IT 方案所需的四类核心能力，建立从基础知识到场景设计的学习路径。</p>
+          </div>
+          <div class="home-direction-grid" id="homeDirectionGrid"></div>
+        </section>
+
+        <section class="home-section home-products">
+          <div class="home-section-heading">
+            <div><span>FEATURED PRODUCT LAB</span><h2>产品实验室精选</h2></div>
+            <button class="home-section-action" data-route="products">查看全部产品实验室</button>
+          </div>
+          <div class="home-product-grid" id="homeProductGrid"></div>
+        </section>
+
+        <section class="home-section home-latest-labs">
+          <div class="home-section-heading">
+            <div><span>LATEST LAB RECORDS</span><h2>最新实验</h2></div>
+            <p>从当前实验框架中提取配置、验证和复盘记录，持续补全可复现证据。</p>
+          </div>
+          <div class="home-lab-list">
+            <article><div><small>综合实验</small><h3>企业出口安全模拟</h3></div><span class="lab-state active">进行中</span><button data-route="labs">查看详情</button></article>
+            <article><div><small>验证记录</small><h3>NAT 与访问策略验证</h3></div><span class="lab-state pending">待记录</span><button data-route="labs">查看详情</button></article>
+            <article><div><small>复盘记录</small><h3>日志分析与实验复盘</h3></div><span class="lab-state ready">模板已建立</span><button data-route="labs">查看详情</button></article>
+          </div>
+        </section>
+
+        <section class="home-section home-updates">
+          <div class="home-section-heading">
+            <div><span>RECENT UPDATES</span><h2>最近更新</h2></div>
+          </div>
+          <div class="home-update-list">
+            <button data-route="labs"><span>实验室</span><b>企业出口安全模拟实验框架已建立</b><i>查看</i></button>
+            <button data-product-open="af"><span>产品实验室</span><b>AF 产品学习模板已建立</b><i>查看</i></button>
+            <button data-route="comparison"><span>厂商对比</span><b>企业出口安全场景对比已建立</b><i>查看</i></button>
+            <button data-route="solutions"><span>解决方案</span><b>成长型企业升级方案模板已建立</b><i>查看</i></button>
+          </div>
         </section>
       </div>
     </section>
