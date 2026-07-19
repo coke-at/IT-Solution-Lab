@@ -156,6 +156,39 @@
     }
   ];
 
+  const vendorComparisons = [
+    {
+      id: 'sangfor', name: '深信服', code: 'SANGFOR', domains: ['安全', '云计算'],
+      positioning: '围绕企业安全运营、访问安全与云基础设施，提供可组合的产品与方案能力。',
+      technicalRoute: '从边界安全、身份访问、终端防护和安全运营延伸到超融合基础设施。',
+      coreCapabilities: ['边界与访问安全', '终端检测与响应', '安全运营', '超融合基础设施'],
+      typicalScenarios: ['企业互联网出口安全', '远程与零信任访问', '终端安全运营', '基础设施整合'],
+      strengths: ['安全能力覆盖较完整', '产品间可形成组合方案', '兼顾安全建设与持续运营'],
+      limitations: ['具体能力受产品版本与授权范围影响', '容量、高可用和兼容性需按客户环境验证', '跨厂商现网集成边界需提前确认'],
+      selectionTips: '当客户希望围绕安全运营、访问控制或超融合建设形成一体化方案，并重视后续落地与运维协同时，可以纳入重点评估。'
+    },
+    {
+      id: 'huawei', name: '华为', code: 'HUAWEI', domains: ['安全', '网络', '云计算'],
+      positioning: '覆盖企业网络、安全与云平台等技术领域，适合从整体基础设施架构进行评估。',
+      technicalRoute: '以园区、广域、数据中心网络为基础，结合安全边界与云平台能力形成整体架构。',
+      coreCapabilities: ['园区与数据中心网络', '路由与广域连接', '边界安全', '云平台与虚拟化'],
+      typicalScenarios: ['企业网络升级', '数据中心网络建设', '网络与安全协同', '云基础设施建设'],
+      strengths: ['网络产品领域覆盖广', '网络、安全与云可纳入统一架构评估', '适合体系化基础设施规划'],
+      limitations: ['需要结合现网技术栈确认集成方式', '整体方案复杂度与团队运维能力需要匹配', '具体型号、授权和兼容性需逐项核验'],
+      selectionTips: '当客户已有相关网络技术体系，或建设目标强调园区、广域、数据中心与云平台的整体规划时，可以结合现网延续性进行评估。'
+    },
+    {
+      id: 'h3c', name: 'H3C', code: 'H3C', domains: ['安全', '网络', '云计算'],
+      positioning: '覆盖企业网络、安全、云平台与超融合等领域，可作为基础设施综合建设路线进行评估。',
+      technicalRoute: '以交换、路由和安全产品承载网络基础，结合云平台与超融合能力扩展数据中心建设。',
+      coreCapabilities: ['交换与路由', '网络安全', '云平台', '超融合基础设施'],
+      typicalScenarios: ['园区网络建设', '企业广域连接', '数据中心基础设施', '云与超融合建设'],
+      strengths: ['网络基础设施产品覆盖较完整', '安全与云能力可参与组合选型', '可围绕园区和数据中心形成建设路径'],
+      limitations: ['实际方案需核对具体产品系列与版本', '跨领域组合能力需要结合项目范围验证', '现网兼容、运维工具和团队经验需纳入评估'],
+      selectionTips: '当客户重点建设园区网络、广域连接或数据中心基础设施，并希望同步评估安全与云能力时，可以结合既有设备体系和运维经验考虑。'
+    }
+  ];
+
   const futureVendors = [
     { name: '华为', focus: '网络、安全与云平台', code: 'HW' },
     { name: 'H3C', focus: '网络、云与安全', code: 'H3C' },
@@ -164,7 +197,7 @@
     { name: '天融信', focus: '边界与综合安全', code: 'TOP' }
   ];
 
-  window.itSolutionLab = { technologyDomains, productLabs, futureVendors, labExperiments, solutionCases };
+  window.itSolutionLab = { technologyDomains, productLabs, futureVendors, labExperiments, solutionCases, vendorComparisons };
 
   const pageTitles = {
     home: 'IT Solution Lab · 工程师成长实验室',
@@ -286,6 +319,63 @@
         <button class="technology-entry" ${entryAttribute}><span>${domain.entryLabel}</span><b>→</b></button>
       </article>`;
     }).join('');
+  }
+
+  const vendorComparisonFilterState = { vendor: '全部', domain: '全部' };
+
+  function renderVendorComparisonFilters() {
+    const vendorFilters = document.querySelector('#comparisonVendorFilters');
+    const domainFilters = document.querySelector('#comparisonDomainFilters');
+    if (!vendorFilters || !domainFilters) return;
+    const vendors = ['全部', ...vendorComparisons.map(vendor => vendor.name)];
+    const domains = ['全部', ...new Set(vendorComparisons.flatMap(vendor => vendor.domains))];
+    vendorFilters.innerHTML = vendors.map(vendor => `<button class="${vendor === vendorComparisonFilterState.vendor ? 'active' : ''}" data-comparison-vendor="${vendor}" aria-pressed="${vendor === vendorComparisonFilterState.vendor}">${vendor}</button>`).join('');
+    domainFilters.innerHTML = domains.map(domain => `<button class="${domain === vendorComparisonFilterState.domain ? 'active' : ''}" data-comparison-domain="${domain}" aria-pressed="${domain === vendorComparisonFilterState.domain}">${domain}</button>`).join('');
+  }
+
+  function vendorComparisonList(items) {
+    return `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+  }
+
+  function renderVendorComparisonMatrix() {
+    const matrix = document.querySelector('#vendorComparisonMatrix');
+    const resultCount = document.querySelector('#comparisonResultCount');
+    if (!matrix) return;
+    const vendors = vendorComparisons.filter(vendor => {
+      const matchesVendor = vendorComparisonFilterState.vendor === '全部' || vendor.name === vendorComparisonFilterState.vendor;
+      const matchesDomain = vendorComparisonFilterState.domain === '全部' || vendor.domains.includes(vendorComparisonFilterState.domain);
+      return matchesVendor && matchesDomain;
+    });
+    if (resultCount) resultCount.textContent = `当前展示 ${vendors.length} 家厂商`;
+    if (!vendors.length) {
+      matrix.style.removeProperty('--vendor-count');
+      matrix.innerHTML = '<div class="vendor-comparison-empty"><b>暂无匹配内容</b><p>当前厂商与产品领域组合暂无可用的对比资料。</p></div>';
+      return;
+    }
+    const rows = [
+      { label: '厂商定位', key: 'positioning' },
+      { label: '技术路线', key: 'technicalRoute' },
+      { label: '核心能力', key: 'coreCapabilities', list: true },
+      { label: '典型场景', key: 'typicalScenarios', list: true },
+      { label: '优势方向', key: 'strengths', list: true },
+      { label: '需要注意', key: 'limitations', list: true },
+      { label: '选型考虑', key: 'selectionTips', selection: true }
+    ];
+    matrix.style.setProperty('--vendor-count', vendors.length);
+    matrix.innerHTML = `
+      <div class="vendor-comparison-matrix-grid">
+        <div class="vendor-matrix-corner"><span>比较维度</span><small>OBJECTIVE VIEW</small></div>
+        ${vendors.map(vendor => `<div class="vendor-matrix-head"><span>${vendor.code}</span><h3>${vendor.name}</h3><div>${vendor.domains.map(domain => `<em>${domain}</em>`).join('')}</div></div>`).join('')}
+        ${rows.map(row => `
+          <div class="vendor-matrix-label">${row.label}</div>
+          ${vendors.map(vendor => `<div class="vendor-matrix-cell${row.selection ? ' is-selection' : ''}">${row.list ? vendorComparisonList(vendor[row.key]) : `<p>${vendor[row.key]}</p>`}</div>`).join('')}
+        `).join('')}
+      </div>`;
+  }
+
+  function renderVendorComparisonCenter() {
+    renderVendorComparisonFilters();
+    renderVendorComparisonMatrix();
   }
 
   document.addEventListener('click', event => {
@@ -628,6 +718,26 @@
       });
       renderProductLabs();
     }
+    const comparisonVendorButton = event.target.closest('[data-comparison-vendor]');
+    if (comparisonVendorButton) {
+      vendorComparisonFilterState.vendor = comparisonVendorButton.dataset.comparisonVendor;
+      document.querySelectorAll('[data-comparison-vendor]').forEach(button => {
+        const active = button === comparisonVendorButton;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      renderVendorComparisonMatrix();
+    }
+    const comparisonDomainButton = event.target.closest('[data-comparison-domain]');
+    if (comparisonDomainButton) {
+      vendorComparisonFilterState.domain = comparisonDomainButton.dataset.comparisonDomain;
+      document.querySelectorAll('[data-comparison-domain]').forEach(button => {
+        const active = button === comparisonDomainButton;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      renderVendorComparisonMatrix();
+    }
   });
 
   document.querySelector('[data-lab-close]')?.addEventListener('click', () => productDialog?.close());
@@ -639,6 +749,7 @@
 
   renderHomeContent();
   renderTechnologyMap();
+  renderVendorComparisonCenter();
   renderSolutionsCenter();
   renderLabCenter();
   renderProductLabs();
