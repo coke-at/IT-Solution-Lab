@@ -155,19 +155,36 @@
     </section>
 
     <section class="page" id="technology" data-page="technology">
-      <div class="page-frame">
-        <div class="page-heading">
-          <div><span>02 / TECHNOLOGY MAP</span><h1>技术能力地图</h1></div>
-          <p>把零散知识组织成可学习、可验证、可关联项目证据的技术体系。</p>
+      <div class="page-frame technology-map-page">
+        <div class="page-heading technology-map-heading">
+          <div><span>02 / TECHNOLOGY MAP</span><h1>技术地图</h1><small>Technology Map</small></div>
+          <p>建立企业 IT 从基础到解决方案的完整学习路径。</p>
         </div>
-        <div class="tech-summary">
-          <div><span>4</span><small>能力域</small></div><div><span>28</span><small>技能节点</small></div><div><span>1</span><small>当前学习路径</small></div><div><span>自评</span><small>进度口径</small></div>
-        </div>
+        <section class="technology-stage-section" aria-labelledby="technologyStageTitle">
+          <div class="technology-section-heading"><div><span>LEARNING STAGES</span><h2 id="technologyStageTitle">学习阶段</h2></div><p>先建立基础认知，再逐步进入网络、安全、云计算与方案设计。</p></div>
+          <ol class="technology-stage-flow">
+            <li class="completed"><b>01</b><span>基础能力<small>基础认知已建立</small></span></li>
+            <li class="completed"><b>02</b><span>网络<small>已完成阶段</small></span></li>
+            <li class="current"><b>03</b><span>安全<small>当前学习重点</small></span></li>
+            <li><b>04</b><span>云计算<small>待系统补全</small></span></li>
+            <li><b>05</b><span>解决方案<small>目标能力</small></span></li>
+          </ol>
+        </section>
+        <div class="technology-section-heading domain-heading"><div><span>TECHNOLOGY DOMAINS</span><h2>技术领域</h2></div><p>围绕四个核心方向整理知识节点、当前状态与后续学习入口。</p></div>
         <div class="technology-grid" id="technologyGrid"></div>
-        <section class="learning-path-card">
-          <div class="card-label"><span>ACTIVE PATH</span><b>SECURITY PRESALES</b></div>
-          <div class="learning-path-copy"><h2>安全售前能力补全路线</h2><p>网络基础 → 安全产品 → 客户场景 → 架构方案 → 演示与表达</p></div>
-          <div class="path-nodes"><span class="done">Network</span><i></i><span class="current">Security</span><i></i><span>Scenario</span><i></i><span>Architecture</span><i></i><span>Presentation</span></div>
+        <section class="technology-relation-section" aria-labelledby="technologyRelationTitle">
+          <div class="technology-section-heading"><div><span>TECHNOLOGY RELATION</span><h2 id="technologyRelationTitle">技术关系</h2></div><p>知识学习最终需要经过产品实践与实验验证，才能形成可落地的解决方案。</p></div>
+          <div class="technology-relation-flow"><span>网络</span><i>→</i><span>安全</span><i>→</i><span>产品</span><i>→</i><span>实验</span><i>→</i><span>解决方案</span></div>
+        </section>
+        <section class="recommended-path-section" aria-labelledby="recommendedPathTitle">
+          <div class="technology-section-heading"><div><span>RECOMMENDED PATH</span><h2 id="recommendedPathTitle">推荐学习顺序</h2></div><p>按顺序推进，也可以直接进入当前最需要补全的学习环节。</p></div>
+          <ol class="recommended-path-list">
+            <li><button data-tech-focus="network"><b>01</b><span>网络基础<small>协议、交换、路由与流量路径</small></span><i>查看领域</i></button></li>
+            <li><button data-tech-focus="security"><b>02</b><span>网络安全<small>边界、身份、终端与安全运营</small></span><i>查看领域</i></button></li>
+            <li><button data-route="products"><b>03</b><span>产品配置<small>用统一模板理解和配置产品</small></span><i>进入产品实验室</i></button></li>
+            <li><button data-route="labs"><b>04</b><span>实验验证<small>通过拓扑、配置与测试验证知识</small></span><i>进入实验室</i></button></li>
+            <li><button data-route="solutions"><b>05</b><span>解决方案设计<small>把技术能力转化为客户方案</small></span><i>进入方案中心</i></button></li>
+          </ol>
         </section>
       </div>
     </section>
