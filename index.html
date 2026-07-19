@@ -259,36 +259,22 @@
     </section>
 
     <section class="page" id="solutions" data-page="solutions">
-      <div class="page-frame">
-        <div class="page-heading">
-          <div><span>05 / SOLUTION CENTER</span><h1>解决方案中心</h1></div>
-          <p>将技术知识转化为客户能理解、团队能落地、结果能验证的解决方案作品。</p>
+      <div class="page-frame solutions-center-page">
+        <div class="page-heading solutions-center-heading">
+          <div><span>05 / SOLUTIONS</span><h1>解决方案中心</h1><small>Solutions</small></div>
+          <p>从客户需求出发，将网络、安全与云能力组织成可交付的企业 IT 方案。</p>
         </div>
-        <section class="solution-case">
-          <div class="case-overview">
-            <div class="case-index"><span>CASE TEMPLATE</span><b>001</b></div>
-            <h2>成长型企业安全与云基础设施升级</h2>
-            <div class="case-tags"><span>制造业</span><span>800 人</span><span>多分支</span><span>模板案例</span></div>
-            <div class="case-brief"><div><small>客户现状</small><p>出口能力分散、远程访问缺少统一控制、终端与云平台独立运维。</p></div><div><small>核心问题</small><p>边界风险、身份访问、终端威胁、资源弹性与合规要求。</p></div></div>
-          </div>
-          <div class="architecture-board">
-            <div class="board-head"><span>SOLUTION ARCHITECTURE</span><b>LOGICAL VIEW</b></div>
-            <div class="architecture-flow">
-              <div class="arch-node internet"><small>EXTERNAL</small><b>Internet / Branch</b></div>
-              <i></i>
-              <div class="arch-node security"><small>EDGE SECURITY</small><b>AF + aTrust</b></div>
-              <i></i>
-              <div class="arch-node core"><small>BUSINESS CORE</small><b>Core Network</b></div>
-              <i></i>
-              <div class="arch-split"><div class="arch-node"><small>ENDPOINT</small><b>EDR</b></div><div class="arch-node"><small>CLOUD</small><b>HCI</b></div><div class="arch-node"><small>OPERATION</small><b>SIP</b></div></div>
-            </div>
-          </div>
+        <div class="solutions-stat-grid" id="solutionsStats" aria-label="解决方案中心统计"></div>
+        <section class="solutions-filter-panel" aria-label="方案筛选">
+          <div class="solutions-filter-row"><span>场景类型</span><div class="solutions-filter-options" id="solutionScenarioFilters"></div></div>
+          <div class="solutions-filter-row"><span>方案状态</span><div class="solutions-filter-options" id="solutionStatusFilters"></div></div>
         </section>
-        <div class="solution-bottom-grid">
-          <article><span>PRODUCT COMBINATION</span><h3>产品组合</h3><div class="product-combo"><b>AF</b><b>aTrust</b><b>EDR</b><b>HCI</b><b>SIP</b></div></article>
-          <article><span>DELIVERY PHASES</span><h3>实施路径</h3><ol class="phase-list"><li><b>01</b><div><strong>规划</strong><small>调研、范围、目标与风险</small></div></li><li><b>02</b><div><strong>部署</strong><small>分阶段上线与联调</small></div></li><li><b>03</b><div><strong>优化</strong><small>基线、运营与持续改进</small></div></li></ol></article>
-          <article class="template-prompt"><span>PRESALES CHECK</span><h3>方案必须说清楚</h3><ul><li>为什么现在要建设？</li><li>方案如何对应业务问题？</li><li>选择这些产品的依据是什么？</li><li>如何实施、验证与持续运营？</li></ul></article>
-        </div>
+        <div class="solutions-results-head"><div><span>SOLUTIONS</span><h2>方案内容</h2></div><p id="solutionResultCount" aria-live="polite"></p></div>
+        <div class="solutions-grid" id="solutionsGrid"></div>
+        <section class="solutions-method-section" aria-labelledby="solutionsMethodTitle">
+          <div class="solutions-section-heading"><div><span>SOLUTION METHOD</span><h2 id="solutionsMethodTitle">统一方案设计流程</h2></div><p>所有方案都从客户背景和约束出发，经过架构与产品选择，最终形成可实施的交付路径。</p></div>
+          <ol class="solutions-method-flow"><li><b>01</b><span>客户背景</span></li><li><b>02</b><span>需求分析</span></li><li><b>03</b><span>约束识别</span></li><li><b>04</b><span>架构设计</span></li><li><b>05</b><span>产品组合</span></li><li><b>06</b><span>实施交付</span></li></ol>
+        </section>
       </div>
     </section>
 
@@ -365,6 +351,7 @@
   <aside id="compareBar"><span>已选 <b id="compareCount">0</b>/4</span><div id="compareChips"></div><button id="openCompare">开始比较 →</button><button id="clearCompare">清空</button></aside>
 
   <dialog id="productLabDialog" class="lab-dialog"><button class="x" data-lab-close aria-label="关闭">×</button><div id="productLabBody"></div></dialog>
+  <dialog id="solutionDialog" class="solution-dialog"><button class="x" data-solution-close aria-label="关闭">×</button><div id="solutionBody"></div></dialog>
   <dialog id="labExperimentDialog" class="lab-experiment-dialog"><button class="x" data-experiment-close aria-label="关闭">×</button><div id="labExperimentBody"></div></dialog>
   <dialog id="detail"><button class="x" data-close aria-label="关闭">×</button><div id="detailBody"></div></dialog>
   <dialog id="compare"><button class="x" data-close aria-label="关闭">×</button><div class="compare-head"><span>PRODUCT COMPARISON</span><h2>产品横向比较</h2></div><div id="compareTable"></div></dialog>
