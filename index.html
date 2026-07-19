@@ -61,11 +61,15 @@
         <button data-manual><i>册</i><span class="nav-copy"><b>用户手册</b><small>User Manuals</small></span></button>
         <button data-knowledge="delivery"><i>交</i><span class="nav-copy"><b>交付标准</b><small>Delivery Standards</small></span></button>
         <button data-knowledge="trouble"><i>障</i><span class="nav-copy"><b>问题排障</b><small>Troubleshooting</small></span></button>
-        <div class="nav-sublabel"><b>业务工具</b><small>Operations</small></div>
-        <button data-op="ticket"><i>单</i><span class="nav-copy"><b>工单系统</b><small>Ticketing</small></span><em id="ticketMetric">0</em></button>
-        <button data-op="quote"><i>¥</i><span class="nav-copy"><b>报价系统</b><small>Quotation</small></span></button>
-        <button data-op="inquiry"><i>询</i><span class="nav-copy"><b>询价系统</b><small>Inquiry</small></span><em id="inquiryMetric">0</em></button>
-        <button data-op="tender"><i>文</i><span class="nav-copy"><b>招投标工具</b><small>Tender Tools</small></span></button>
+        <div class="nav-tools-menu">
+          <button type="button" class="nav-tools-trigger" data-nav-tools aria-expanded="false" aria-controls="navToolsPanel"><i>具</i><span class="nav-copy"><b>业务工具</b><small>Operations</small></span></button>
+          <div class="nav-tools-panel" id="navToolsPanel" hidden>
+            <button data-op="ticket"><i>单</i><span class="nav-copy"><b>工单系统</b><small>Ticketing</small></span><em id="ticketMetric">0</em></button>
+            <button data-op="quote"><i>¥</i><span class="nav-copy"><b>报价系统</b><small>Quotation</small></span></button>
+            <button data-op="inquiry"><i>询</i><span class="nav-copy"><b>询价系统</b><small>Inquiry</small></span><em id="inquiryMetric">0</em></button>
+            <button data-op="tender"><i>文</i><span class="nav-copy"><b>招投标工具</b><small>Tender Tools</small></span></button>
+          </div>
+        </div>
       </div>
 
       <div class="nav-group" aria-labelledby="nav-growth">

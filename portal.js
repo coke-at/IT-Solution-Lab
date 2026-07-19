@@ -160,6 +160,14 @@
     menu.setAttribute('aria-expanded', String(document.body.classList.contains('nav-open')));
   }));
 
+  const navToolsToggle = document.querySelector('[data-nav-tools]');
+  const navToolsPanel = document.querySelector('#navToolsPanel');
+  navToolsToggle?.addEventListener('click', () => {
+    const expanded = navToolsToggle.getAttribute('aria-expanded') === 'true';
+    navToolsToggle.setAttribute('aria-expanded', String(!expanded));
+    navToolsPanel.hidden = expanded;
+  });
+
   const root = document.documentElement;
   const themeButton = document.querySelector('#theme');
   root.classList.remove('dark');
