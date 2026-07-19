@@ -1,11 +1,340 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Coke：国产IT设备搜索、比较、部署交付与故障排查知识库"><title>Coke</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="detail.css"><link rel="stylesheet" href="hero-title.css"><link rel="stylesheet" href="ops.css"><link rel="stylesheet" href="youtube-layout.css"><link rel="stylesheet" href="refinements.css"><link rel="stylesheet" href="manuals.css"></head><body>
-<header><button class="menu-toggle" id="menuToggle" aria-label="展开导航">☰</button><a class="logo" href="#top"><i>C</i><span>Coke<small>IT KNOWLEDGE BASE</small></span></a><div class="top-label">设备知识与业务协作</div><button id="theme" aria-label="切换主题">◐</button></header>
-<aside class="side-nav" id="sideNav"><nav><a href="#catalog" class="active"><i>▦</i><span>设备库</span></a><a href="#vendors"><i>◫</i><span>厂商版图</span></a><button data-manual><i>册</i><span>用户手册</span></button><button data-knowledge="delivery"><i>交</i><span>交付标准</span></button><button data-knowledge="trouble"><i>障</i><span>问题排障</span></button><button data-op="ticket"><i>☷</i><span>工单系统</span><em id="ticketMetric">0</em></button><button data-op="quote"><i>¥</i><span>报价系统</span></button><button data-op="inquiry"><i>⇄</i><span>询价系统</span><em id="inquiryMetric">0</em></button><button data-op="tender"><i>文</i><span>招投标系统</span></button></nav><div class="side-foot"><b>Coke</b><small>本地数据 · 私有工作台</small></div></aside>
-<main id="top"><section class="hero"><div class="crumb">国产化 · IT基础设施 · 部署与运维知识</div><p>搜索设备、比较产品，查看核心知识、部署交付与故障排查。</p><div class="hero-search"><span>⌕</span><input id="heroSearch" placeholder="搜索：CloudEngine、S12500、AF、OceanStor、超融合、数据库…"><button id="searchGo">搜索设备</button></div><div class="metrics"><div><b id="productCount">0</b><small>代表设备/系列</small></div><div><b id="vendorCount">0</b><small>主流厂商</small></div><div><b>10</b><small>产品类别</small></div><div><b>4</b><small>最多并排比较</small></div></div></section>
-<section class="catalog" id="catalog"><div class="section-title"><div><span>01 / PRODUCT DATABASE</span><h2>产品知识库</h2></div><p>点击卡片查看知识点；勾选“加入比较”建立横向对照。型号为代表系列，采购前请核对厂商最新规格。</p></div><div class="searchbar"><label><span>⌕</span><input id="search" type="search" placeholder="产品名 / 型号 / 厂商 / 关键词"></label><select id="vendorFilter"><option value="全部">全部厂商</option></select><select id="typeFilter"><option value="全部">全部类别</option></select><button id="clear">重置</button></div><div class="quick" id="quick"></div><div class="resultline"><span>找到 <b id="resultCount">0</b> 项</span><select id="sort"><option value="default">推荐排序</option><option value="vendor">按厂商</option><option value="name">按产品名</option></select></div><div class="grid" id="grid"></div><button class="more" id="more">加载更多</button><div class="empty" id="empty"><b>没有找到匹配产品</b><p>试试厂商别名、系列名称或更宽泛的技术关键词。</p></div></section>
-<section class="vendors" id="vendors"><div class="section-title light"><div><span>02 / VENDOR LANDSCAPE</span><h2>厂商能力图谱</h2></div><p>按主要产品覆盖方向理解厂商定位。一个厂商可能跨越多个能力域。</p></div><div id="vendorMap" class="vendor-map"></div></section>
-<section class="guide" id="guide"><div class="section-title"><div><span>03 / DELIVERY & TROUBLESHOOTING</span><h2>交付与排障方法</h2></div><p>进入任意设备详情，可查看该类设备的完整部署步骤、验收项目、常见故障和排查顺序。</p></div><div class="guide-grid"><article><i>01</i><h3>部署前</h3><p>确认业务目标、拓扑、容量、兼容清单、地址与 VLAN 规划、授权、机柜电力、光模块和回退方案。</p><span>规划 · 勘察 · 备件 · 变更窗口</span></article><article><i>02</i><h3>部署中</h3><p>先基础环境与管理面，再数据面和业务策略；分阶段联调，每一步保存配置、日志和基线证据。</p><span>上架 · 初始化 · 配置 · 联调</span></article><article><i>03</i><h3>交付验收</h3><p>验证功能、性能、冗余切换、监控告警、备份恢复和安全基线，输出拓扑、配置与操作手册。</p><span>测试 · 文档 · 培训 · 移交</span></article><article><i>04</i><h3>故障排查</h3><p>按物理层、链路层、网络层、服务层、应用层自下而上；先定界、再取证、后变更，并保留回退点。</p><span>现象 · 范围 · 证据 · 根因</span></article></div></section>
-<section class="disclaimer"><b>资料边界</b><p>本图谱用于产品认知和初步选型，不构成招采参数或兼容性承诺。“全部厂商”按主要国产 IT 厂商方向持续扩展；具体型号、参数、版本与授权以厂商最新官方资料为准。</p></section></main>
-<aside id="compareBar"><span>已选 <b id="compareCount">0</b>/4</span><div id="compareChips"></div><button id="openCompare">开始比较 →</button><button id="clearCompare">清空</button></aside>
-<dialog id="detail"><button class="x" data-close>×</button><div id="detailBody"></div></dialog><dialog id="compare"><button class="x" data-close>×</button><div class="compare-head"><span>PRODUCT COMPARISON</span><h2>产品横向比较</h2></div><div id="compareTable"></div></dialog><dialog id="opsDialog"><button class="x" id="opsClose">×</button><div id="opsBody"></div></dialog><dialog id="knowledgeDialog"><button class="x" id="knowledgeClose">×</button><div id="knowledgeBody"></div></dialog><dialog id="manualDialog"><button class="x" id="manualClose">×</button><div id="manualBody"></div></dialog>
-<footer><div><b>Coke</b><span>国产 IT 设备学习、部署与排障工具</span></div><p>数据为公开资料的知识化整理 · 2026</p></footer><script src="app.js"></script><script src="manuals.js"></script><script src="knowledge.js"></script><script src="ops.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="IT Solution Lab：记录从企业安全运维到解决方案设计的学习、实验与成长。">
+  <meta name="theme-color" content="#080b14">
+  <meta property="og:title" content="IT Solution Lab">
+  <meta property="og:description" content="从企业安全运维到解决方案设计，探索网络、安全、云计算技术体系。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://sangfor-tech-stack.warm-siren-6838.chatgpt.site/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="IT Solution Lab">
+  <meta name="twitter:description" content="从企业安全运维到解决方案设计。">
+  <meta name="twitter:image" content="https://sangfor-tech-stack.warm-siren-6838.chatgpt.site/og.png">
+  <title>IT Solution Lab · 工程师成长实验室</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="detail.css">
+  <link rel="stylesheet" href="ops.css">
+  <link rel="stylesheet" href="youtube-layout.css">
+  <link rel="stylesheet" href="refinements.css">
+  <link rel="stylesheet" href="manuals.css">
+  <link rel="stylesheet" href="lab.css">
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <button class="menu-toggle" id="menuToggle" aria-label="展开导航" aria-expanded="false">☰</button>
+    <a class="logo lab-logo" href="#home" data-route="home" aria-label="返回首页">
+      <i>IT</i>
+      <span>Solution Lab<small>LEARN · BUILD · ARCHITECT</small></span>
+    </a>
+    <div class="top-context">
+      <span class="signal"><i></i> LAB ONLINE</span>
+      <span class="role-chip">Sangfor After-sales → Security Presales</span>
+    </div>
+    <button id="theme" class="icon-button" aria-label="切换明暗主题" title="切换明暗主题">◐</button>
+  </header>
+
+  <aside class="side-nav" id="sideNav">
+    <div class="nav-intro">
+      <span>PERSONAL WORKSPACE</span>
+      <strong>从交付经验，走向方案能力</strong>
+    </div>
+    <nav aria-label="主要导航">
+      <span class="nav-label">Learning path</span>
+      <a href="#home" class="active" data-route="home"><i>01</i><span>首页</span></a>
+      <a href="#technology" data-route="technology"><i>02</i><span>Technology Map</span></a>
+      <a href="#products" data-route="products"><i>03</i><span>Product Lab</span></a>
+      <a href="#comparison" data-route="comparison"><i>04</i><span>Vendor Comparison</span></a>
+      <a href="#solutions" data-route="solutions"><i>05</i><span>Solution Center</span></a>
+      <a href="#labs" data-route="labs"><i>06</i><span>Lab 实验室</span></a>
+      <a href="#dashboard" data-route="dashboard"><i>07</i><span>成长 Dashboard</span></a>
+
+      <span class="nav-label nav-label-tools">Engineering toolkit</span>
+      <a href="#resources" data-route="resources"><i>库</i><span>设备知识库</span></a>
+      <button data-manual><i>册</i><span>用户手册</span></button>
+      <button data-knowledge="delivery"><i>交</i><span>交付标准</span></button>
+      <button data-knowledge="trouble"><i>障</i><span>问题排障</span></button>
+      <button data-op="ticket"><i>单</i><span>工单系统</span><em id="ticketMetric">0</em></button>
+      <button data-op="quote"><i>¥</i><span>报价系统</span></button>
+      <button data-op="inquiry"><i>询</i><span>询价系统</span><em id="inquiryMetric">0</em></button>
+      <button data-op="tender"><i>文</i><span>招投标工具</span></button>
+    </nav>
+    <div class="side-foot">
+      <span>目标角色</span>
+      <b>Solution Architect</b>
+      <small>学习内容、实验记录与方案作品将持续沉淀在这里。</small>
+    </div>
+  </aside>
+
+  <main class="workspace-main" id="top">
+    <section class="page active" id="home" data-page="home">
+      <div class="page-frame home-frame">
+        <section class="lab-hero">
+          <div class="hero-copy">
+            <div class="eyebrow"><span>PERSONAL IT KNOWLEDGE SYSTEM</span><b>2026 / BUILDING</b></div>
+            <h1>IT Solution<br><em>Lab.</em></h1>
+            <p>从企业安全运维到解决方案设计，<br>探索网络、安全、云计算技术体系。</p>
+            <div class="domain-pills" aria-label="学习领域">
+              <span>Security</span><span>Network</span><span>Cloud</span><span>Solution Architecture</span>
+            </div>
+            <div class="hero-actions">
+              <button class="primary-action" data-route="technology">查看技术地图 <b>→</b></button>
+              <button class="secondary-action" data-route="products">进入 Product Lab</button>
+            </div>
+          </div>
+
+          <div class="hero-system" aria-label="解决方案能力关系图">
+            <div class="system-head"><span>CAPABILITY SYSTEM</span><b>v1.0</b></div>
+            <div class="system-canvas">
+              <div class="orbit orbit-one"></div>
+              <div class="orbit orbit-two"></div>
+              <div class="system-node node-center"><i>SA</i><strong>Solution<br>Architecture</strong></div>
+              <div class="system-node node-network"><i>N</i><span>Network</span></div>
+              <div class="system-node node-security"><i>S</i><span>Security</span></div>
+              <div class="system-node node-cloud"><i>C</i><span>Cloud</span></div>
+              <div class="system-node node-lab"><i>L</i><span>Lab</span></div>
+            </div>
+            <div class="system-foot"><span><i></i> Knowledge connected</span><span>04 domains</span></div>
+          </div>
+        </section>
+
+        <section class="journey-section">
+          <div class="section-heading compact-heading">
+            <div><span>CAREER JOURNEY</span><h2>我的成长路线</h2></div>
+            <p>以真实交付经验为起点，持续补齐安全深度、客户沟通和架构设计能力。</p>
+          </div>
+          <div class="journey-track">
+            <article class="done"><b>01</b><i></i><div><small>FOUNDATION</small><h3>售后工程师</h3><p>交付、运维、排障</p></div></article>
+            <article class="current"><b>02</b><i></i><div><small>NOW</small><h3>安全技术专家</h3><p>体系化补齐安全能力</p></div></article>
+            <article><b>03</b><i></i><div><small>NEXT</small><h3>解决方案工程师</h3><p>场景分析、方案表达</p></div></article>
+            <article><b>04</b><i></i><div><small>TARGET</small><h3>Solution Architect</h3><p>端到端架构设计</p></div></article>
+          </div>
+        </section>
+
+        <section class="overview-grid">
+          <article class="overview-card overview-progress">
+            <div class="card-label"><span>01</span><b>CURRENT FOCUS</b></div>
+            <h3>能力概览</h3>
+            <div class="mini-progress"><span>Security</span><i><b style="--level:72%"></b></i><em>72</em></div>
+            <div class="mini-progress"><span>Network</span><i><b style="--level:64%"></b></i><em>64</em></div>
+            <div class="mini-progress"><span>Cloud</span><i><b style="--level:43%"></b></i><em>43</em></div>
+            <div class="mini-progress"><span>Solution</span><i><b style="--level:35%"></b></i><em>35</em></div>
+            <button data-route="dashboard">查看成长 Dashboard →</button>
+          </article>
+          <article class="overview-card feature-card purple">
+            <div class="card-label"><span>02</span><b>PRODUCT LAB</b></div>
+            <div class="feature-icon">AF</div>
+            <h3>下一代防火墙<br>学习模板</h3>
+            <p>从网络配置、安全策略，到故障排查与售前思考。</p>
+            <button data-product-open="af">打开 AF 模板 →</button>
+          </article>
+          <article class="overview-card feature-card blue">
+            <div class="card-label"><span>03</span><b>LAB RECORD</b></div>
+            <div class="topology-thumb" aria-hidden="true"><i>WEB</i><b>AF</b><span>CORE</span><em>SRV</em></div>
+            <h3>企业出口安全模拟</h3>
+            <p>用实验验证拓扑、策略、NAT、日志和故障排查路径。</p>
+            <button data-route="labs">查看实验框架 →</button>
+          </article>
+        </section>
+      </div>
+    </section>
+
+    <section class="page" id="technology" data-page="technology">
+      <div class="page-frame">
+        <div class="page-heading">
+          <div><span>02 / TECHNOLOGY MAP</span><h1>技术能力地图</h1></div>
+          <p>把零散知识组织成可学习、可验证、可关联项目证据的技术体系。</p>
+        </div>
+        <div class="tech-summary">
+          <div><span>4</span><small>能力域</small></div><div><span>28</span><small>技能节点</small></div><div><span>1</span><small>当前学习路径</small></div><div><span>自评</span><small>进度口径</small></div>
+        </div>
+        <div class="technology-grid" id="technologyGrid"></div>
+        <section class="learning-path-card">
+          <div class="card-label"><span>ACTIVE PATH</span><b>SECURITY PRESALES</b></div>
+          <div class="learning-path-copy"><h2>安全售前能力补全路线</h2><p>网络基础 → 安全产品 → 客户场景 → 架构方案 → 演示与表达</p></div>
+          <div class="path-nodes"><span class="done">Network</span><i></i><span class="current">Security</span><i></i><span>Scenario</span><i></i><span>Architecture</span><i></i><span>Presentation</span></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="page" id="products" data-page="products">
+      <div class="page-frame">
+        <div class="page-heading">
+          <div><span>03 / PRODUCT LAB</span><h1>产品学习实验室</h1></div>
+          <p>统一记录产品定位、配置路径、排障方法和售前价值，先建立模板，再逐步补充知识。</p>
+        </div>
+        <div class="lab-toolbar">
+          <div class="toolbar-tabs" id="vendorTabs"><button class="active" data-lab-vendor="深信服">深信服</button><button data-lab-vendor="未来厂商">未来厂商</button></div>
+          <span><i></i> 1 个模板已建立 · 5 个待补充</span>
+        </div>
+        <div class="product-lab-grid" id="productLabGrid"></div>
+        <section class="template-strip">
+          <div><span>UNIFIED TEMPLATE</span><h2>每个产品都回答同一组问题</h2></div>
+          <ol><li><b>01</b>解决什么问题？</li><li><b>02</b>核心模块是什么？</li><li><b>03</b>如何配置与验证？</li><li><b>04</b>如何排查故障？</li><li><b>05</b>客户为什么需要？</li></ol>
+        </section>
+      </div>
+    </section>
+
+    <section class="page" id="comparison" data-page="comparison">
+      <div class="page-frame">
+        <div class="page-heading">
+          <div><span>04 / VENDOR COMPARISON</span><h1>厂商路线对比</h1></div>
+          <p>不从参数表出发，而是先理解客户场景，再分析需求，最后讨论厂商与技术路线。</p>
+        </div>
+        <div class="comparison-flow" aria-label="厂商对比流程"><span class="active">01 客户场景</span><i>→</i><span>02 需求分析</span><i>→</i><span>03 技术路线</span><i>→</i><span>04 厂商选择</span></div>
+        <section class="scenario-card">
+          <div class="scenario-side">
+            <span>SCENARIO 001</span><h2>企业出口安全建设</h2><p>面向中型企业互联网出口，关注边界防护、业务发布、远程接入与统一审计。</p>
+            <div class="scenario-meta"><div><small>客户规模</small><b>500–2,000 人</b></div><div><small>核心目标</small><b>安全与可运营</b></div></div>
+          </div>
+          <div class="requirements-panel">
+            <div class="panel-title"><b>需求优先级</b><span>REQUIREMENT FIT</span></div>
+            <div class="requirement-row"><span>边界威胁防护</span><i><b style="--level:95%"></b></i><em>P0</em></div>
+            <div class="requirement-row"><span>策略与日志运营</span><i><b style="--level:86%"></b></i><em>P0</em></div>
+            <div class="requirement-row"><span>远程安全接入</span><i><b style="--level:70%"></b></i><em>P1</em></div>
+            <div class="requirement-row"><span>高可用与扩展</span><i><b style="--level:82%"></b></i><em>P1</em></div>
+          </div>
+        </section>
+        <div class="vendor-fit-grid">
+          <article class="vendor-fit featured"><div class="fit-head"><span>深信服</span><b>AF</b></div><h3>适合重视安全运营与易用性的出口场景</h3><ul><li>一体化边界防护能力</li><li>策略、日志与安全运营联动</li><li>与 aTrust、EDR 等组合扩展</li></ul><div class="fit-note"><b>重点验证</b><span>实际吞吐、特性授权、日志留存与高可用方案</span></div></article>
+          <article class="vendor-fit"><div class="fit-head"><span>华为</span><b>Firewall</b></div><h3>适合网络体系完整、强调统一架构的场景</h3><ul><li>网络与安全产品体系协同</li><li>多层级边界与数据中心覆盖</li><li>适配大型网络建设方法</li></ul><div class="fit-note"><b>重点验证</b><span>现网技术栈、运维团队能力与方案复杂度</span></div></article>
+          <article class="vendor-fit muted-card"><div class="fit-head"><span>其他厂商</span><b>待研究</b></div><h3>保留场景化研究位置</h3><p>后续按奇安信、绿盟、天融信等技术路线逐步补充，不做无依据的简单参数罗列。</p><button class="ghost-button" disabled>对比模板已就绪</button></article>
+        </div>
+        <div class="decision-note"><span>DECISION PRINCIPLE</span><p>没有“永远更好”的产品，只有在客户目标、现网约束、团队能力和预算边界下更匹配的选择。</p></div>
+      </div>
+    </section>
+
+    <section class="page" id="solutions" data-page="solutions">
+      <div class="page-frame">
+        <div class="page-heading">
+          <div><span>05 / SOLUTION CENTER</span><h1>解决方案中心</h1></div>
+          <p>将技术知识转化为客户能理解、团队能落地、结果能验证的解决方案作品。</p>
+        </div>
+        <section class="solution-case">
+          <div class="case-overview">
+            <div class="case-index"><span>CASE TEMPLATE</span><b>001</b></div>
+            <h2>成长型企业安全与云基础设施升级</h2>
+            <div class="case-tags"><span>制造业</span><span>800 人</span><span>多分支</span><span>模板案例</span></div>
+            <div class="case-brief"><div><small>客户现状</small><p>出口能力分散、远程访问缺少统一控制、终端与云平台独立运维。</p></div><div><small>核心问题</small><p>边界风险、身份访问、终端威胁、资源弹性与合规要求。</p></div></div>
+          </div>
+          <div class="architecture-board">
+            <div class="board-head"><span>SOLUTION ARCHITECTURE</span><b>LOGICAL VIEW</b></div>
+            <div class="architecture-flow">
+              <div class="arch-node internet"><small>EXTERNAL</small><b>Internet / Branch</b></div>
+              <i></i>
+              <div class="arch-node security"><small>EDGE SECURITY</small><b>AF + aTrust</b></div>
+              <i></i>
+              <div class="arch-node core"><small>BUSINESS CORE</small><b>Core Network</b></div>
+              <i></i>
+              <div class="arch-split"><div class="arch-node"><small>ENDPOINT</small><b>EDR</b></div><div class="arch-node"><small>CLOUD</small><b>HCI</b></div><div class="arch-node"><small>OPERATION</small><b>SIP</b></div></div>
+            </div>
+          </div>
+        </section>
+        <div class="solution-bottom-grid">
+          <article><span>PRODUCT COMBINATION</span><h3>产品组合</h3><div class="product-combo"><b>AF</b><b>aTrust</b><b>EDR</b><b>HCI</b><b>SIP</b></div></article>
+          <article><span>DELIVERY PHASES</span><h3>实施路径</h3><ol class="phase-list"><li><b>01</b><div><strong>规划</strong><small>调研、范围、目标与风险</small></div></li><li><b>02</b><div><strong>部署</strong><small>分阶段上线与联调</small></div></li><li><b>03</b><div><strong>优化</strong><small>基线、运营与持续改进</small></div></li></ol></article>
+          <article class="template-prompt"><span>PRESALES CHECK</span><h3>方案必须说清楚</h3><ul><li>为什么现在要建设？</li><li>方案如何对应业务问题？</li><li>选择这些产品的依据是什么？</li><li>如何实施、验证与持续运营？</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="labs" data-page="labs">
+      <div class="page-frame">
+        <div class="page-heading">
+          <div><span>06 / HANDS-ON LAB</span><h1>动手实验室</h1></div>
+          <p>通过可复现的拓扑、步骤和测试结果，把“知道”转化为“做过并验证过”。</p>
+        </div>
+        <section class="active-lab">
+          <div class="lab-info">
+            <div class="status-line"><span class="status-dot"></span><b>ACTIVE LAB</b><em>进行中</em></div>
+            <h2>企业出口安全模拟</h2>
+            <p>验证出口防火墙基础网络、源 NAT、安全策略、日志分析和常见故障定位。</p>
+            <dl><div><dt>实验目标</dt><dd>跑通内网访问互联网，并记录策略与会话验证方法。</dd></div><div><dt>实验环境</dt><dd>虚拟防火墙、核心交换、测试终端、业务服务器。</dd></div><div><dt>关联技能</dt><dd><span>Routing</span><span>NAT</span><span>ACL</span><span>Logging</span></dd></div></dl>
+          </div>
+          <div class="lab-topology">
+            <div class="board-head"><span>LAB TOPOLOGY</span><b>ENV / 001</b></div>
+            <div class="topology-canvas">
+              <div class="topo-node cloud"><i>WAN</i><b>Internet</b><small>203.0.113.0/24</small></div><span class="topo-line"><em>untrust</em></span>
+              <div class="topo-node firewall"><i>AF</i><b>Firewall</b><small>NAT · Policy · Log</small></div><span class="topo-line"><em>trust</em></span>
+              <div class="topo-node switch"><i>SW</i><b>Core Switch</b><small>VLAN 10 / 20</small></div><span class="topo-line split-line"><em>LAN</em></span>
+              <div class="topo-branches"><div class="topo-node small"><i>PC</i><b>Client</b></div><div class="topo-node small"><i>SRV</i><b>Server</b></div></div>
+            </div>
+          </div>
+        </section>
+        <div class="lab-record-grid">
+          <article><div class="card-label"><span>01</span><b>CONFIGURE</b></div><h3>配置记录</h3><ol><li>初始化与接口规划</li><li>路由与地址对象</li><li>源 NAT 与访问策略</li><li>安全模块与日志</li></ol></article>
+          <article><div class="card-label"><span>02</span><b>VERIFY</b></div><h3>测试结果</h3><div class="test-row"><span>基础连通</span><b class="pending">待记录</b></div><div class="test-row"><span>NAT 会话</span><b class="pending">待记录</b></div><div class="test-row"><span>策略日志</span><b class="pending">待记录</b></div></article>
+          <article><div class="card-label"><span>03</span><b>REVIEW</b></div><h3>实验复盘</h3><p>保留现象、假设、证据、变更和结论，形成可以复用的排障路径。</p><button class="ghost-button" disabled>实验记录模板已建立</button></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="dashboard" data-page="dashboard">
+      <div class="page-frame">
+        <div class="page-heading">
+          <div><span>07 / GROWTH DASHBOARD</span><h1>个人成长 Dashboard</h1></div>
+          <p>用学习进度和作品证据记录成长。当前数值为自评基线，后续由实验、产品笔记和方案案例持续更新。</p>
+        </div>
+        <div class="dashboard-metrics"><article><span>技术域</span><b>4</b><small>Network · Security · Cloud · Solution</small></article><article><span>产品模板</span><b>6</b><small>1 个已建立 · 5 个待补充</small></article><article><span>实验记录</span><b>1</b><small>进行中的实践框架</small></article><article><span>方案案例</span><b>1</b><small>首个模板案例</small></article></div>
+        <div class="dashboard-grid">
+          <section class="skill-panel">
+            <div class="panel-title"><div><span>SKILL LEVEL</span><h2>当前技能等级</h2></div><small>SELF ASSESSMENT / 100</small></div>
+            <div class="skill-row"><div><i>N</i><span><b>Network</b><small>TCP/IP · Routing · VPN</small></span></div><strong>64</strong><em><b style="--level:64%"></b></em></div>
+            <div class="skill-row"><div><i>S</i><span><b>Security</b><small>Firewall · Zero Trust · SOC</small></span></div><strong>72</strong><em><b style="--level:72%"></b></em></div>
+            <div class="skill-row"><div><i>C</i><span><b>Cloud</b><small>HCI · Virtualization · Backup</small></span></div><strong>43</strong><em><b style="--level:43%"></b></em></div>
+            <div class="skill-row"><div><i>A</i><span><b>Solution</b><small>Scenario · Design · Selection</small></span></div><strong>35</strong><em><b style="--level:35%"></b></em></div>
+          </section>
+          <section class="growth-panel">
+            <div class="panel-title"><div><span>CAREER MILESTONE</span><h2>成长阶段</h2></div><small>STEP 02 / 04</small></div>
+            <div class="vertical-journey"><article class="done"><i></i><div><span>已积累</span><h3>售后交付与排障经验</h3><p>真实环境、变更风险、问题定界</p></div></article><article class="current"><i></i><div><span>正在建设</span><h3>安全技术体系</h3><p>产品能力、攻击面、运营方法</p></div></article><article><i></i><div><span>下一阶段</span><h3>售前方案能力</h3><p>调研、设计、选型、表达</p></div></article><article><i></i><div><span>长期目标</span><h3>Solution Architect</h3><p>业务与技术的端到端连接</p></div></article></div>
+          </section>
+        </div>
+        <section class="evidence-strip"><div><span>EVIDENCE MODEL</span><h2>让每一格进度都有作品支撑</h2></div><div class="evidence-items"><span>产品笔记 <b>→</b> Product Lab</span><span>动手验证 <b>→</b> Lab</span><span>场景分析 <b>→</b> Comparison</span><span>方案表达 <b>→</b> Solution Center</span></div></section>
+      </div>
+    </section>
+
+    <section class="page resources-page" id="resources" data-page="resources">
+      <div class="page-frame wide-frame">
+        <div class="page-heading resource-heading">
+          <div><span>ENGINEERING TOOLKIT</span><h1>设备知识库</h1></div>
+          <p>原有设备搜索、产品详情、横向比较、交付排障与业务协作能力完整保留，作为工程实践工具箱。</p>
+        </div>
+        <section class="resource-search-panel">
+          <div class="hero-search"><span>⌕</span><input id="heroSearch" placeholder="搜索：CloudEngine、S12500、AF、OceanStor、超融合、数据库…"><button id="searchGo">搜索设备</button></div>
+          <div class="metrics"><div><b id="productCount">0</b><small>代表设备/系列</small></div><div><b id="vendorCount">0</b><small>主流厂商</small></div><div><b>10</b><small>产品类别</small></div><div><b>4</b><small>最多并排比较</small></div></div>
+        </section>
+        <section class="catalog" id="catalog">
+          <div class="section-title"><div><span>PRODUCT DATABASE</span><h2>产品资料与工程知识</h2></div><p>点击卡片查看知识点；勾选“加入比较”建立横向对照。具体型号、版本与授权以厂商最新资料为准。</p></div>
+          <div class="searchbar"><label><span>⌕</span><input id="search" type="search" placeholder="产品名 / 型号 / 厂商 / 关键词"></label><select id="vendorFilter"><option value="全部">全部厂商</option></select><select id="typeFilter"><option value="全部">全部类别</option></select><button id="clear">重置</button></div>
+          <div class="quick" id="quick"></div><div class="resultline"><span>找到 <b id="resultCount">0</b> 项</span><select id="sort"><option value="default">推荐排序</option><option value="vendor">按厂商</option><option value="name">按产品名</option></select></div>
+          <div class="grid" id="grid"></div><button class="more" id="more">加载更多</button><div class="empty" id="empty"><b>没有找到匹配产品</b><p>试试厂商别名、系列名称或更宽泛的技术关键词。</p></div>
+        </section>
+        <section class="vendors" id="vendors"><div class="section-title light"><div><span>VENDOR LANDSCAPE</span><h2>厂商能力图谱</h2></div><p>按主要产品覆盖方向理解厂商定位。一个厂商可能跨越多个能力域。</p></div><div id="vendorMap" class="vendor-map"></div></section>
+        <section class="guide" id="guide"><div class="section-title"><div><span>DELIVERY & TROUBLESHOOTING</span><h2>交付与排障方法</h2></div><p>进入任意设备详情，可查看对应类别的部署步骤、验收项目、常见故障和排查顺序。</p></div><div class="guide-grid"><article><i>01</i><h3>部署前</h3><p>确认业务目标、拓扑、容量、兼容清单、地址与 VLAN 规划、授权、机柜电力和回退方案。</p><span>规划 · 勘察 · 备件</span></article><article><i>02</i><h3>部署中</h3><p>先管理面，再数据面和业务策略；分阶段联调，每一步保存配置、日志和基线证据。</p><span>初始化 · 配置 · 联调</span></article><article><i>03</i><h3>交付验收</h3><p>验证功能、性能、冗余、监控、备份与安全基线，输出拓扑、配置和操作手册。</p><span>测试 · 文档 · 移交</span></article><article><i>04</i><h3>故障排查</h3><p>从链路到应用逐层检查；先定界、再取证、后变更，并保留回退点。</p><span>现象 · 证据 · 根因</span></article></div></section>
+      </div>
+    </section>
+  </main>
+
+  <aside id="compareBar"><span>已选 <b id="compareCount">0</b>/4</span><div id="compareChips"></div><button id="openCompare">开始比较 →</button><button id="clearCompare">清空</button></aside>
+
+  <dialog id="productLabDialog" class="lab-dialog"><button class="x" data-lab-close aria-label="关闭">×</button><div id="productLabBody"></div></dialog>
+  <dialog id="detail"><button class="x" data-close aria-label="关闭">×</button><div id="detailBody"></div></dialog>
+  <dialog id="compare"><button class="x" data-close aria-label="关闭">×</button><div class="compare-head"><span>PRODUCT COMPARISON</span><h2>产品横向比较</h2></div><div id="compareTable"></div></dialog>
+  <dialog id="opsDialog"><button class="x" id="opsClose" aria-label="关闭">×</button><div id="opsBody"></div></dialog>
+  <dialog id="knowledgeDialog"><button class="x" id="knowledgeClose" aria-label="关闭">×</button><div id="knowledgeBody"></div></dialog>
+  <dialog id="manualDialog"><button class="x" id="manualClose" aria-label="关闭">×</button><div id="manualBody"></div></dialog>
+
+  <footer class="site-footer"><div><b>IT Solution Lab</b><span>Learn · Build · Architect</span></div><p>个人学习实验室 · 持续建设中 · 2026</p></footer>
+
+  <script src="app.js"></script>
+  <script src="manuals.js"></script>
+  <script src="knowledge.js"></script>
+  <script src="ops.js"></script>
+  <script src="portal.js"></script>
+</body>
+</html>
