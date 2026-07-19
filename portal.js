@@ -1,22 +1,22 @@
 (() => {
   const technologyDomains = [
     {
-      id: 'network', code: 'N', title: 'Network', level: 64,
+      id: 'network', code: 'N', title: 'Network', titleCn: '网络', level: 64, status: 'completed', statusLabel: '阶段已完成', entryRoute: 'labs', entryLabel: '进入网络实验',
       summary: '构建方案设计所需的网络基础与流量视角。',
       skills: ['TCP/IP', 'VLAN', 'STP', 'OSPF', 'BGP', 'NAT', 'VPN', 'SD-WAN']
     },
     {
-      id: 'security', code: 'S', title: 'Security', level: 72,
+      id: 'security', code: 'S', title: 'Security', titleCn: '安全', level: 72, status: 'current', statusLabel: '正在学习', entryRoute: 'products', entryLabel: '进入产品实验室',
       summary: '从边界防护走向身份、终端与安全运营。',
       skills: ['Firewall', 'Zero Trust', 'EDR', 'SOC', '等保']
     },
     {
-      id: 'cloud', code: 'C', title: 'Cloud', level: 43,
+      id: 'cloud', code: 'C', title: 'Cloud', titleCn: '云计算', level: 43, status: 'planned', statusLabel: '待系统补全', entryProduct: 'hci', entryLabel: '学习 HCI 产品',
       summary: '理解云基础设施、资源交付与业务连续性。',
       skills: ['HCI', 'Virtualization', 'Cloud Platform', 'Backup']
     },
     {
-      id: 'solution', code: 'A', title: 'Solution', level: 35,
+      id: 'solution', code: 'A', title: 'Solution', titleCn: '解决方案', level: 35, status: 'planned', statusLabel: '目标能力', entryRoute: 'solutions', entryLabel: '进入方案中心',
       summary: '把技术能力转化为客户场景与方案表达。',
       skills: ['Architecture Design', 'Product Selection', 'Customer Scenario']
     }
@@ -209,16 +209,30 @@
   function renderTechnologyMap() {
     const grid = document.querySelector('#technologyGrid');
     if (!grid) return;
-    grid.innerHTML = technologyDomains.map((domain, index) => `
-      <article class="technology-card tech-${domain.id}">
-        <div class="tech-card-head"><i>${domain.code}</i><span>${String(index + 1).padStart(2, '0')} / DOMAIN</span><b>${domain.level}%</b></div>
-        <h2>${domain.title}</h2>
+    grid.innerHTML = technologyDomains.map((domain, index) => {
+      const entryAttribute = domain.entryProduct ? `data-product-open="${domain.entryProduct}"` : `data-route="${domain.entryRoute}"`;
+      return `
+      <article class="technology-card tech-${domain.id} status-${domain.status}" id="technology-domain-${domain.id}" tabindex="-1">
+        <div class="tech-card-head"><i>${domain.code}</i><span>${String(index + 1).padStart(2, '0')} / DOMAIN</span><em>${domain.statusLabel}</em></div>
+        <small>${domain.title}</small><h2>${domain.titleCn}</h2>
         <p>${domain.summary}</p>
-        <div class="domain-progress"><b style="--level:${domain.level}%"></b></div>
+        <div class="domain-status"><span>能力自评</span><i><b style="--level:${domain.level}%"></b></i><strong>${domain.level}%</strong></div>
         <div class="skill-chips">${domain.skills.map((skill, skillIndex) => `<span class="${skillIndex < Math.ceil(domain.skills.length * domain.level / 100) ? 'learned' : ''}">${skill}</span>`).join('')}</div>
-        <div class="tech-card-foot"><span>${domain.skills.length} 个技能节点</span><em>${index === 1 ? '当前重点' : '持续学习'}</em></div>
-      </article>`).join('');
+        <button class="technology-entry" ${entryAttribute}><span>${domain.entryLabel}</span><b>→</b></button>
+      </article>`;
+    }).join('');
   }
+
+  document.addEventListener('click', event => {
+    const focusButton = event.target.closest('[data-tech-focus]');
+    if (!focusButton) return;
+    const target = document.querySelector(`#technology-domain-${focusButton.dataset.techFocus}`);
+    if (!target) return;
+    document.querySelectorAll('.technology-card.focused').forEach(card => card.classList.remove('focused'));
+    target.classList.add('focused');
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    target.focus({ preventScroll: true });
+  });
 
   const productFilterState = { vendor: '全部', category: '全部' };
 
