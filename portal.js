@@ -34,11 +34,61 @@
       troubleshooting: ['先确认路由与 NAT，再检查策略命中和会话。', '结合流量日志、安全日志与系统资源进行定界。'],
       presales: ['客户需要解决什么风险与运营问题？', '出口规模、业务类型与高可用要求是什么？', '哪些能力需要授权、联动或持续服务？']
     },
-    { id: 'atrust', vendor: '深信服', name: 'aTrust', fullName: '零信任访问平台', category: '身份与访问', level: 16, status: '待补充', tone: 'blue', positioning: '建立身份驱动的安全访问能力。', modules: [], workflow: [], troubleshooting: [], presales: [] },
-    { id: 'edr', vendor: '深信服', name: 'EDR', fullName: '终端检测与响应', category: '终端安全', level: 18, status: '待补充', tone: 'cyan', positioning: '覆盖终端防护、检测、响应和运营闭环。', modules: [], workflow: [], troubleshooting: [], presales: [] },
-    { id: 'sip', vendor: '深信服', name: 'SIP', fullName: '安全感知与运营平台', category: '安全运营', level: 12, status: '待补充', tone: 'amber', positioning: '聚合安全数据，支持分析、告警与运营。', modules: [], workflow: [], troubleshooting: [], presales: [] },
-    { id: 'hci', vendor: '深信服', name: 'HCI', fullName: '超融合基础设施', category: '云基础设施', level: 26, status: '待补充', tone: 'indigo', positioning: '统一交付计算、存储、网络与云平台能力。', modules: [], workflow: [], troubleshooting: [], presales: [] },
-    { id: 'ac', vendor: '深信服', name: 'AC', fullName: '上网行为管理', category: '网络与行为', level: 24, status: '待补充', tone: 'green', positioning: '提供应用识别、流量管理、访问控制与行为审计。', modules: [], workflow: [], troubleshooting: [], presales: [] }
+    {
+      id: 'atrust', vendor: '深信服', name: 'aTrust', fullName: '零信任访问平台', category: '身份与访问', level: 34, status: '模板已建立', tone: 'blue',
+      positioning: '面向远程办公、分支访问和第三方接入，以持续身份验证和最小权限控制替代对网络位置的默认信任。',
+      modules: [
+        { title: '身份与终端', items: ['身份源', '多因素认证', '终端检查', '动态授权'] },
+        { title: '访问与策略', items: ['应用发布', '访问策略', '微隔离', '行为审计'] }
+      ],
+      workflow: ['对接身份源', '纳管应用', '建立终端基线', '配置访问策略', '验证审计闭环'],
+      troubleshooting: ['先区分身份认证、终端检查、应用代理和后端业务四个故障域。', '结合登录日志、策略命中、终端状态和应用连通性逐层验证。'],
+      presales: ['哪些人员、终端和应用需要从何处访问？', '现有 VPN 的权限粒度、暴露面和运维痛点是什么？', '身份源、终端类型和关键应用是否满足集成条件？']
+    },
+    {
+      id: 'edr', vendor: '深信服', name: 'EDR', fullName: '终端检测与响应', category: '终端安全', level: 36, status: '模板已建立', tone: 'cyan',
+      positioning: '面向服务器和办公终端，建立资产发现、恶意行为检测、事件响应与终端运营的持续防护闭环。',
+      modules: [
+        { title: '终端防护', items: ['资产盘点', '病毒防护', '漏洞风险', '外设控制'] },
+        { title: '检测响应', items: ['行为检测', '事件调查', '隔离处置', '威胁狩猎'] }
+      ],
+      workflow: ['部署管理平台', '安装终端 Agent', '建立防护基线', '验证告警处置', '形成运营报表'],
+      troubleshooting: ['先检查 Agent 在线、策略下发和特征更新，再分析告警证据链。', '处置异常终端前保留进程、网络连接、文件和用户行为证据。'],
+      presales: ['终端数量、操作系统分布和重点资产范围是什么？', '客户更关注合规防病毒、勒索防护还是高级威胁响应？', '现有桌面管理、SOC 和应急流程如何联动？']
+    },
+    {
+      id: 'sip', vendor: '深信服', name: 'SIP', fullName: '安全感知与运营平台', category: '安全运营', level: 31, status: '模板已建立', tone: 'amber',
+      positioning: '汇聚网络、终端和安全设备的数据，对威胁线索进行关联分析、告警研判和闭环运营。',
+      modules: [
+        { title: '数据与分析', items: ['日志接入', '资产画像', '威胁情报', '关联分析'] },
+        { title: '运营与响应', items: ['告警研判', '事件处置', '态势展示', '运营报表'] }
+      ],
+      workflow: ['梳理数据源', '完成日志接入', '校准资产画像', '配置运营规则', '复盘处置效果'],
+      troubleshooting: ['先确认数据源时间、格式和采集状态，再检查解析、关联与告警规则。', '告警研判应回到原始日志、受影响资产和攻击链证据，避免只看风险分值。'],
+      presales: ['客户已有多少安全设备和可用数据源？', '谁负责日常研判，告警如何升级和闭环？', '平台建设目标是合规展示、实战运营还是托管服务？']
+    },
+    {
+      id: 'hci', vendor: '深信服', name: 'HCI', fullName: '超融合基础设施', category: '云基础设施', level: 39, status: '模板已建立', tone: 'indigo',
+      positioning: '将计算、分布式存储、虚拟网络和统一管理整合为资源平台，支撑业务快速交付与基础设施简化运维。',
+      modules: [
+        { title: '资源基础', items: ['计算虚拟化', '分布式存储', '虚拟网络', '资源调度'] },
+        { title: '可靠与运维', items: ['高可用', '备份容灾', '监控告警', '容量管理'] }
+      ],
+      workflow: ['完成容量规划', '部署集群网络', '初始化资源池', '迁移验证业务', '执行高可用验收'],
+      troubleshooting: ['先检查物理链路、集群健康和资源水位，再定位计算、存储或网络故障域。', '性能问题需同时核对业务负载、资源争用、存储时延和网络吞吐。'],
+      presales: ['业务规模、性能基线和未来三年增长量是多少？', '哪些系统要求高可用、备份、容灾或不停机迁移？', '现有虚拟化授权、运维能力和改造窗口如何约束方案？']
+    },
+    {
+      id: 'ac', vendor: '深信服', name: 'AC', fullName: '上网行为管理', category: '网络与行为', level: 37, status: '模板已建立', tone: 'green',
+      positioning: '面向互联网出口和园区网络，对用户、应用与带宽进行识别、控制、优化和合规审计。',
+      modules: [
+        { title: '识别与接入', items: ['用户认证', '组织同步', '应用识别', '终端识别'] },
+        { title: '策略与运营', items: ['访问控制', '流量管理', '行为审计', '报表分析'] }
+      ],
+      workflow: ['规划部署模式', '对接用户身份', '识别应用流量', '配置控制策略', '验证审计报表'],
+      troubleshooting: ['先确认部署模式、流量路径和用户识别状态，再检查应用识别与策略优先级。', '带宽问题应区分链路容量、单用户占用、应用突发和策略限速。'],
+      presales: ['出口带宽、并发用户和主要应用分布是什么？', '客户更关注效率、带宽体验、合规审计还是内容风险？', '身份认证、日志留存和隐私边界有哪些要求？']
+    }
   ];
 
   const futureVendors = [
