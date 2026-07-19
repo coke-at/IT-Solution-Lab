@@ -293,33 +293,26 @@
     </section>
 
     <section class="page" id="labs" data-page="labs">
-      <div class="page-frame">
-        <div class="page-heading">
-          <div><span>06 / HANDS-ON LAB</span><h1>动手实验室</h1></div>
-          <p>通过可复现的拓扑、步骤和测试结果，把“知道”转化为“做过并验证过”。</p>
+      <div class="page-frame labs-center-page">
+        <div class="page-heading labs-center-heading">
+          <div><span>06 / LABS</span><h1>实验中心</h1><small>Labs</small></div>
+          <p>通过拓扑、配置、验证与复盘，将技术知识转化为可复现的实践证据。</p>
         </div>
-        <section class="active-lab">
-          <div class="lab-info">
-            <div class="status-line"><span class="status-dot"></span><b>ACTIVE LAB</b><em>进行中</em></div>
-            <h2>企业出口安全模拟</h2>
-            <p>验证出口防火墙基础网络、源 NAT、安全策略、日志分析和常见故障定位。</p>
-            <dl><div><dt>实验目标</dt><dd>跑通内网访问互联网，并记录策略与会话验证方法。</dd></div><div><dt>实验环境</dt><dd>虚拟防火墙、核心交换、测试终端、业务服务器。</dd></div><div><dt>关联技能</dt><dd><span>Routing</span><span>NAT</span><span>ACL</span><span>Logging</span></dd></div></dl>
-          </div>
-          <div class="lab-topology">
-            <div class="board-head"><span>LAB TOPOLOGY</span><b>ENV / 001</b></div>
-            <div class="topology-canvas">
-              <div class="topo-node cloud"><i>WAN</i><b>Internet</b><small>203.0.113.0/24</small></div><span class="topo-line"><em>untrust</em></span>
-              <div class="topo-node firewall"><i>AF</i><b>Firewall</b><small>NAT · Policy · Log</small></div><span class="topo-line"><em>trust</em></span>
-              <div class="topo-node switch"><i>SW</i><b>Core Switch</b><small>VLAN 10 / 20</small></div><span class="topo-line split-line"><em>LAN</em></span>
-              <div class="topo-branches"><div class="topo-node small"><i>PC</i><b>Client</b></div><div class="topo-node small"><i>SRV</i><b>Server</b></div></div>
-            </div>
-          </div>
+        <div class="labs-stat-grid" id="labsStats" aria-label="实验中心统计"></div>
+        <section class="labs-filter-panel" aria-label="实验筛选">
+          <div class="labs-filter-row"><span>实验方向</span><div class="labs-filter-options" id="labDirectionFilters"></div></div>
+          <div class="labs-filter-row"><span>实验状态</span><div class="labs-filter-options" id="labStatusFilters"></div></div>
         </section>
-        <div class="lab-record-grid">
-          <article><div class="card-label"><span>01</span><b>CONFIGURE</b></div><h3>配置记录</h3><ol><li>初始化与接口规划</li><li>路由与地址对象</li><li>源 NAT 与访问策略</li><li>安全模块与日志</li></ol></article>
-          <article><div class="card-label"><span>02</span><b>VERIFY</b></div><h3>测试结果</h3><div class="test-row"><span>基础连通</span><b class="pending">待记录</b></div><div class="test-row"><span>NAT 会话</span><b class="pending">待记录</b></div><div class="test-row"><span>策略日志</span><b class="pending">待记录</b></div></article>
-          <article><div class="card-label"><span>03</span><b>REVIEW</b></div><h3>实验复盘</h3><p>保留现象、假设、证据、变更和结论，形成可以复用的排障路径。</p><button class="ghost-button" disabled>实验记录模板已建立</button></article>
-        </div>
+        <div class="labs-results-head"><div><span>EXPERIMENTS</span><h2>实验内容</h2></div><p id="labResultCount" aria-live="polite"></p></div>
+        <div class="labs-grid" id="labsGrid"></div>
+        <section class="labs-method-section" aria-labelledby="labsMethodTitle">
+          <div class="labs-section-heading"><div><span>LAB METHOD</span><h2 id="labsMethodTitle">统一实验流程</h2></div><p>所有实验都按照同一套方法记录，确保环境、步骤与结果可以被复现。</p></div>
+          <ol class="labs-method-flow"><li><b>01</b><span>实验目标</span></li><li><b>02</b><span>拓扑设计</span></li><li><b>03</b><span>环境准备</span></li><li><b>04</b><span>配置实施</span></li><li><b>05</b><span>验证测试</span></li><li><b>06</b><span>故障复盘</span></li></ol>
+        </section>
+        <section class="labs-evidence-section" aria-labelledby="labsEvidenceTitle">
+          <div class="labs-section-heading"><div><span>LAB EVIDENCE</span><h2 id="labsEvidenceTitle">实验证据</h2></div><p>实验结束后保留可检查的过程记录，而不是只记录“配置完成”。</p></div>
+          <div class="labs-evidence-grid"><span>拓扑图</span><span>配置记录</span><span>测试结果</span><span>日志截图</span><span>故障复盘</span><span>方案结论</span></div>
+        </section>
       </div>
     </section>
 
@@ -372,6 +365,7 @@
   <aside id="compareBar"><span>已选 <b id="compareCount">0</b>/4</span><div id="compareChips"></div><button id="openCompare">开始比较 →</button><button id="clearCompare">清空</button></aside>
 
   <dialog id="productLabDialog" class="lab-dialog"><button class="x" data-lab-close aria-label="关闭">×</button><div id="productLabBody"></div></dialog>
+  <dialog id="labExperimentDialog" class="lab-experiment-dialog"><button class="x" data-experiment-close aria-label="关闭">×</button><div id="labExperimentBody"></div></dialog>
   <dialog id="detail"><button class="x" data-close aria-label="关闭">×</button><div id="detailBody"></div></dialog>
   <dialog id="compare"><button class="x" data-close aria-label="关闭">×</button><div class="compare-head"><span>PRODUCT COMPARISON</span><h2>产品横向比较</h2></div><div id="compareTable"></div></dialog>
   <dialog id="opsDialog"><button class="x" id="opsClose" aria-label="关闭">×</button><div id="opsBody"></div></dialog>
