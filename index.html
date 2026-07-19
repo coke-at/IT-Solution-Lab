@@ -173,20 +173,42 @@
     </section>
 
     <section class="page" id="products" data-page="products">
-      <div class="page-frame">
-        <div class="page-heading">
-          <div><span>03 / PRODUCT LAB</span><h1>产品学习实验室</h1></div>
-          <p>统一记录产品定位、配置路径、排障方法和售前价值，先建立模板，再逐步补充知识。</p>
+      <div class="page-frame product-lab-page">
+        <div class="page-heading product-lab-heading">
+          <div><span>03 / PRODUCT LAB</span><h1>产品实验室</h1><small>Product Lab</small></div>
+          <p>围绕企业 IT 产品，系统整理产品定位、核心功能、配置实践、故障排查与售前思考。</p>
         </div>
-        <div class="lab-toolbar">
-          <div class="toolbar-tabs" id="vendorTabs"><button class="active" data-lab-vendor="深信服">深信服</button><button data-lab-vendor="未来厂商">未来厂商</button></div>
-          <span><i></i> 6 个基础模板已建立 · 持续深化</span>
+        <div class="product-lab-stats" aria-label="产品实验室统计">
+          <div><b>6</b><span>已整理产品</span></div>
+          <div><b>3</b><span>规划厂商</span></div>
+          <div><b>3</b><span>已有分类</span></div>
         </div>
-        <div class="product-lab-grid" id="productLabGrid"></div>
         <section class="template-strip">
-          <div><span>UNIFIED TEMPLATE</span><h2>每个产品都回答同一组问题</h2></div>
-          <ol><li><b>01</b>解决什么问题？</li><li><b>02</b>核心模块是什么？</li><li><b>03</b>如何配置与验证？</li><li><b>04</b>如何排查故障？</li><li><b>05</b>客户为什么需要？</li></ol>
+          <div><span>LEARNING TEMPLATE</span><h2>统一的产品学习模板</h2><p>每个产品都按同一套结构持续整理。</p></div>
+          <ol><li><b>01</b>产品定位</li><li><b>02</b>核心模块</li><li><b>03</b>基础配置</li><li><b>04</b>故障排查</li><li><b>05</b>场景应用</li><li><b>06</b>售前思考</li></ol>
         </section>
+        <section class="product-filter-panel" aria-label="产品筛选">
+          <div class="product-filter-row">
+            <span>厂商</span>
+            <div class="product-filter-options" id="vendorTabs">
+              <button class="active" data-lab-vendor="全部" aria-pressed="true">全部</button>
+              <button data-lab-vendor="深信服" aria-pressed="false">深信服</button>
+              <button data-lab-vendor="华为" aria-pressed="false">华为</button>
+              <button data-lab-vendor="H3C" aria-pressed="false">H3C</button>
+            </div>
+          </div>
+          <div class="product-filter-row">
+            <span>产品类型</span>
+            <div class="product-filter-options" id="categoryTabs">
+              <button class="active" data-lab-category="全部" aria-pressed="true">全部</button>
+              <button data-lab-category="网络安全" aria-pressed="false">网络安全</button>
+              <button data-lab-category="云计算与数据中心" aria-pressed="false">云计算与数据中心</button>
+              <button data-lab-category="终端与访问安全" aria-pressed="false">终端与访问安全</button>
+            </div>
+          </div>
+        </section>
+        <div class="product-results-head"><h2>产品内容</h2><span id="productResultCount" aria-live="polite"></span></div>
+        <div class="product-lab-grid" id="productLabGrid"></div>
       </div>
     </section>
 

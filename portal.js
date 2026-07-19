@@ -220,25 +220,35 @@
       </article>`).join('');
   }
 
-  function renderProductLabs(vendor = '深信服') {
+  const productFilterState = { vendor: '全部', category: '全部' };
+
+  function getProductGroup(product) {
+    if (product.category === '云基础设施') return '云计算与数据中心';
+    if (['身份与访问', '终端安全'].includes(product.category)) return '终端与访问安全';
+    return '网络安全';
+  }
+
+  function renderProductLabs() {
     const grid = document.querySelector('#productLabGrid');
     if (!grid) return;
-    if (vendor === '未来厂商') {
-      grid.innerHTML = futureVendors.map((item, index) => `
-        <article class="future-vendor-card">
-          <div class="future-code">${item.code}</div><span>${String(index + 1).padStart(2, '0')} / ROADMAP</span>
-          <h2>${item.name}</h2><p>${item.focus}</p>
-          <div class="future-state"><i></i> 预留扩展位置</div>
-        </article>`).join('');
+    const filteredProducts = productLabs.filter(product => {
+      const matchesVendor = productFilterState.vendor === '全部' || product.vendor === productFilterState.vendor;
+      const matchesCategory = productFilterState.category === '全部' || getProductGroup(product) === productFilterState.category;
+      return matchesVendor && matchesCategory;
+    });
+    const resultCount = document.querySelector('#productResultCount');
+    if (resultCount) resultCount.textContent = `共 ${filteredProducts.length} 个产品`;
+    if (!filteredProducts.length) {
+      grid.innerHTML = '<div class="product-empty-state"><b>暂无匹配内容</b><p>当前分类暂未整理产品内容。</p></div>';
       return;
     }
-    grid.innerHTML = productLabs.map((product, index) => `
-      <article class="product-lab-card tone-${product.tone} ${product.status === '模板已建立' ? 'featured' : ''}">
-        <div class="product-card-head"><span>${String(index + 1).padStart(2, '0')} / SANGFOR</span><em>${product.status}</em></div>
+    grid.innerHTML = filteredProducts.map((product, index) => `
+      <article class="product-lab-card tone-${product.tone}">
+        <div class="product-card-head"><span>${product.vendor}</span><em>${getProductGroup(product)}</em></div>
         <div class="product-symbol">${product.name}</div>
-        <small>${product.category}</small><h2>${product.fullName}</h2><p>${product.positioning}</p>
-        <div class="product-progress"><i><b style="--level:${product.level}%"></b></i><span>${product.level}%</span></div>
-        <button data-product-open="${product.id}">${product.status === '模板已建立' ? '打开学习模板' : '查看模板结构'} <b>→</b></button>
+        <small>${product.category}</small><h2>${product.name} · ${product.fullName}</h2><p>${product.positioning}</p>
+        <div class="product-progress"><i><b style="--level:${product.level}%"></b></i><span>${product.status} · ${product.level}%</span></div>
+        <button data-product-open="${product.id}">进入产品实验室 <b>→</b></button>
       </article>`).join('');
   }
 
@@ -249,10 +259,10 @@
     const troubleMarkup = hasContent ? product.troubleshooting.map(item => `<li>${item}</li>`).join('') : '<li>常见问题与排查思路待补充</li>';
     const presalesMarkup = hasContent ? product.presales.map(item => `<li>${item}</li>`).join('') : '<li>客户需求、适用场景与选型问题待补充</li>';
     return `
-      <div class="lab-dialog-head"><span>${product.vendor} / PRODUCT LAB</span><div class="dialog-title"><i>${product.name}</i><div><h2>${product.fullName}</h2><p>${product.category} · ${product.status}</p></div></div></div>
-      <section class="dialog-positioning"><span>01 / 产品定位</span><h3>解决什么问题？</h3><p>${product.positioning}</p></section>
+      <div class="lab-dialog-head"><span>${product.vendor} / PRODUCT LAB</span><div class="dialog-title"><i>${product.name}</i><div><h2>${product.fullName}</h2><p>${getProductGroup(product)} · ${product.category}</p></div></div><div class="dialog-progress"><span>${product.status}</span><i><b style="--level:${product.level}%"></b></i><em>${product.level}%</em></div></div>
+      <section class="dialog-positioning"><span>01 / 产品定位与适用场景</span><h3>解决什么问题？适合什么场景？</h3><p>${product.positioning}</p></section>
       <section class="dialog-section"><div class="dialog-section-title"><span>02 / 核心模块</span><h3>从能力结构理解产品</h3></div><div class="module-grid">${moduleMarkup}</div></section>
-      <section class="dialog-section"><div class="dialog-section-title"><span>03 / 配置流程</span><h3>建立可重复的实施路径</h3></div><ol class="workflow-list">${workflowMarkup}</ol></section>
+      <section class="dialog-section"><div class="dialog-section-title"><span>03 / 基础配置</span><h3>建立可重复的实施路径</h3></div><ol class="workflow-list">${workflowMarkup}</ol></section>
       <div class="dialog-two-col">
         <section><span>04 / 故障排查</span><h3>从现象走向证据</h3><ul>${troubleMarkup}</ul></section>
         <section><span>05 / 售前思考</span><h3>从产品走向客户</h3><ul>${presalesMarkup}</ul></section>
@@ -274,8 +284,23 @@
     if (productButton) openProductLab(productButton.dataset.productOpen);
     const vendorButton = event.target.closest('[data-lab-vendor]');
     if (vendorButton) {
-      document.querySelectorAll('[data-lab-vendor]').forEach(button => button.classList.toggle('active', button === vendorButton));
-      renderProductLabs(vendorButton.dataset.labVendor);
+      productFilterState.vendor = vendorButton.dataset.labVendor;
+      document.querySelectorAll('[data-lab-vendor]').forEach(button => {
+        const active = button === vendorButton;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      renderProductLabs();
+    }
+    const categoryButton = event.target.closest('[data-lab-category]');
+    if (categoryButton) {
+      productFilterState.category = categoryButton.dataset.labCategory;
+      document.querySelectorAll('[data-lab-category]').forEach(button => {
+        const active = button === categoryButton;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      renderProductLabs();
     }
   });
 
