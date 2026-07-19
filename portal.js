@@ -91,6 +91,30 @@
     }
   ];
 
+  const labExperiments = [
+    {
+      id: 'enterprise-egress-security',
+      name: '企业出口安全模拟',
+      direction: '安全',
+      type: '综合实验',
+      status: '进行中',
+      templateReady: true,
+      stage: '配置实施与验证',
+      summary: '验证出口防火墙基础网络、源 NAT、安全策略、日志分析和常见故障定位。',
+      background: '模拟企业互联网出口安全场景，在可控环境中建立从网络连通到策略验证的完整实验记录。',
+      objective: '跑通内网访问互联网，并记录策略命中、NAT 会话与日志验证方法。',
+      environment: ['虚拟防火墙', '核心交换', '测试终端', '业务服务器'],
+      skills: ['Routing', 'NAT', 'ACL', 'Logging'],
+      configuration: ['初始化与接口规划', '路由与地址对象', '源 NAT 与访问策略', '安全模块与日志'],
+      tests: [
+        { name: '基础连通', status: '待记录' },
+        { name: 'NAT 会话', status: '待记录' },
+        { name: '策略日志', status: '待记录' }
+      ],
+      review: '保留现象、假设、证据、变更和结论，形成可以复用的排障路径。'
+    }
+  ];
+
   const futureVendors = [
     { name: '华为', focus: '网络、安全与云平台', code: 'HW' },
     { name: 'H3C', focus: '网络、云与安全', code: 'H3C' },
@@ -99,7 +123,7 @@
     { name: '天融信', focus: '边界与综合安全', code: 'TOP' }
   ];
 
-  window.itSolutionLab = { technologyDomains, productLabs, futureVendors };
+  window.itSolutionLab = { technologyDomains, productLabs, futureVendors, labExperiments };
 
   const pageTitles = {
     home: 'IT Solution Lab · 工程师成长实验室',
@@ -234,6 +258,95 @@
     target.focus({ preventScroll: true });
   });
 
+  const labFilterState = { direction: '全部', status: '全部' };
+
+  function getLabStatusClass(status) {
+    return ({ '进行中': 'active', '待记录': 'pending', '模板已建立': 'ready', '已完成': 'completed' })[status] || 'neutral';
+  }
+
+  function renderLabStats() {
+    const stats = document.querySelector('#labsStats');
+    if (!stats) return;
+    const values = [
+      [labExperiments.length, '实验总数'],
+      [labExperiments.filter(lab => lab.status === '进行中').length, '进行中'],
+      [labExperiments.filter(lab => lab.templateReady).length, '已建立模板'],
+      [labExperiments.filter(lab => lab.status === '已完成').length, '已完成']
+    ];
+    stats.innerHTML = values.map(([value, label]) => `<div><b>${value}</b><span>${label}</span></div>`).join('');
+  }
+
+  function renderLabFilters() {
+    const directionFilters = document.querySelector('#labDirectionFilters');
+    const statusFilters = document.querySelector('#labStatusFilters');
+    if (!directionFilters || !statusFilters) return;
+    const directions = ['全部', ...new Set(labExperiments.map(lab => lab.direction))];
+    const statuses = ['全部', ...new Set(labExperiments.map(lab => lab.status))];
+    directionFilters.innerHTML = directions.map(value => `<button class="${value === labFilterState.direction ? 'active' : ''}" data-experiment-direction="${value}" aria-pressed="${value === labFilterState.direction}">${value}</button>`).join('');
+    statusFilters.innerHTML = statuses.map(value => `<button class="${value === labFilterState.status ? 'active' : ''}" data-experiment-status="${value}" aria-pressed="${value === labFilterState.status}">${value}</button>`).join('');
+  }
+
+  function renderLabExperiments() {
+    const grid = document.querySelector('#labsGrid');
+    if (!grid) return;
+    const filteredLabs = labExperiments.filter(lab => {
+      const matchesDirection = labFilterState.direction === '全部' || lab.direction === labFilterState.direction;
+      const matchesStatus = labFilterState.status === '全部' || lab.status === labFilterState.status;
+      return matchesDirection && matchesStatus;
+    });
+    const resultCount = document.querySelector('#labResultCount');
+    if (resultCount) resultCount.textContent = `共 ${filteredLabs.length} 个实验`;
+    if (!filteredLabs.length) {
+      grid.innerHTML = '<div class="labs-empty-state"><b>暂无匹配实验</b><p>当前筛选条件下暂未整理实验内容。</p></div>';
+      return;
+    }
+    grid.innerHTML = filteredLabs.map((lab, index) => `
+      <article class="experiment-card">
+        <div class="experiment-card-index"><span>${String(index + 1).padStart(2, '0')} / LAB</span><em class="status-${getLabStatusClass(lab.status)}">${lab.status}</em></div>
+        <div class="experiment-card-copy"><div class="experiment-meta"><span>${lab.direction}</span><i>${lab.type}</i></div><h3>${lab.name}</h3><p>${lab.summary}</p></div>
+        <div class="experiment-card-action"><small>当前阶段</small><strong>${lab.stage}</strong><button data-experiment-open="${lab.id}">查看实验详情 <b>→</b></button></div>
+      </article>`).join('');
+  }
+
+  function labTopologyTemplate() {
+    return `
+      <div class="topology-canvas">
+        <div class="topo-node cloud"><i>WAN</i><b>Internet</b><small>203.0.113.0/24</small></div><span class="topo-line"><em>untrust</em></span>
+        <div class="topo-node firewall"><i>AF</i><b>Firewall</b><small>NAT · Policy · Log</small></div><span class="topo-line"><em>trust</em></span>
+        <div class="topo-node switch"><i>SW</i><b>Core Switch</b><small>VLAN 10 / 20</small></div><span class="topo-line split-line"><em>LAN</em></span>
+        <div class="topo-branches"><div class="topo-node small"><i>PC</i><b>Client</b></div><div class="topo-node small"><i>SRV</i><b>Server</b></div></div>
+      </div>`;
+  }
+
+  function labExperimentTemplate(lab) {
+    const environment = lab.environment.map(item => `<span>${item}</span>`).join('');
+    const skills = lab.skills.map(item => `<span>${item}</span>`).join('');
+    const configuration = lab.configuration.map((item, index) => `<li><b>${String(index + 1).padStart(2, '0')}</b><span>${item}</span></li>`).join('');
+    const tests = lab.tests.map(item => `<div><span>${item.name}</span><b class="status-${getLabStatusClass(item.status)}">${item.status}</b></div>`).join('');
+    return `
+      <div class="experiment-dialog-head"><span>${lab.direction} / ${lab.type}</span><div><h2>${lab.name}</h2><em class="status-${getLabStatusClass(lab.status)}">${lab.status}</em></div><p>${lab.summary}</p><small>当前阶段 · ${lab.stage}</small></div>
+      <section class="experiment-overview"><article><span>01 / 实验背景</span><h3>为什么进行这个实验？</h3><p>${lab.background}</p></article><article><span>02 / 实验目标</span><h3>需要验证什么？</h3><p>${lab.objective}</p></article></section>
+      <section class="experiment-environment"><div class="experiment-section-title"><span>03 / 拓扑与环境</span><h3>建立可复现的实验边界</h3></div><div class="experiment-environment-meta"><div><small>实验环境</small>${environment}</div><div><small>关联技能</small>${skills}</div></div><div class="experiment-topology"><div class="board-head"><span>LAB TOPOLOGY</span><b>ENV / 001</b></div>${labTopologyTemplate()}</div></section>
+      <div class="experiment-detail-grid"><section><div class="experiment-section-title"><span>04 / 配置步骤</span><h3>按顺序记录实施过程</h3></div><ol class="experiment-steps">${configuration}</ol></section><section><div class="experiment-section-title"><span>05 / 验证结果</span><h3>当前验证记录</h3></div><div class="experiment-tests">${tests}</div></section></div>
+      <section class="experiment-review"><div class="experiment-section-title"><span>06 / 问题与复盘</span><h3>从结果沉淀排障方法</h3></div><p>${lab.review}</p><small>${lab.templateReady ? '实验记录模板已建立' : '实验记录模板待建立'}</small></section>`;
+  }
+
+  const labExperimentDialog = document.querySelector('#labExperimentDialog');
+  const labExperimentBody = document.querySelector('#labExperimentBody');
+
+  function openLabExperiment(id) {
+    const lab = labExperiments.find(item => item.id === id);
+    if (!lab || !labExperimentDialog || !labExperimentBody) return;
+    labExperimentBody.innerHTML = labExperimentTemplate(lab);
+    labExperimentDialog.showModal();
+  }
+
+  function renderLabCenter() {
+    renderLabStats();
+    renderLabFilters();
+    renderLabExperiments();
+  }
+
   const productFilterState = { vendor: '全部', category: '全部' };
 
   function getProductGroup(product) {
@@ -296,6 +409,28 @@
   document.addEventListener('click', event => {
     const productButton = event.target.closest('[data-product-open]');
     if (productButton) openProductLab(productButton.dataset.productOpen);
+    const experimentButton = event.target.closest('[data-experiment-open]');
+    if (experimentButton) openLabExperiment(experimentButton.dataset.experimentOpen);
+    const directionButton = event.target.closest('[data-experiment-direction]');
+    if (directionButton) {
+      labFilterState.direction = directionButton.dataset.experimentDirection;
+      document.querySelectorAll('[data-experiment-direction]').forEach(button => {
+        const active = button === directionButton;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      renderLabExperiments();
+    }
+    const statusButton = event.target.closest('[data-experiment-status]');
+    if (statusButton) {
+      labFilterState.status = statusButton.dataset.experimentStatus;
+      document.querySelectorAll('[data-experiment-status]').forEach(button => {
+        const active = button === statusButton;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      renderLabExperiments();
+    }
     const vendorButton = event.target.closest('[data-lab-vendor]');
     if (vendorButton) {
       productFilterState.vendor = vendorButton.dataset.labVendor;
@@ -320,9 +455,12 @@
 
   document.querySelector('[data-lab-close]')?.addEventListener('click', () => productDialog?.close());
   productDialog?.addEventListener('click', event => { if (event.target === productDialog) productDialog.close(); });
+  document.querySelector('[data-experiment-close]')?.addEventListener('click', () => labExperimentDialog?.close());
+  labExperimentDialog?.addEventListener('click', event => { if (event.target === labExperimentDialog) labExperimentDialog.close(); });
 
   renderHomeContent();
   renderTechnologyMap();
+  renderLabCenter();
   renderProductLabs();
   showPage(location.hash.slice(1) || 'home', { updateHash: false, scroll: false, instant: true });
 })();
