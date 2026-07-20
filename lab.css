@@ -565,6 +565,33 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .solution-product-reference footer em{color:var(--purple-2)}
 .solution-product-reference footer span{color:var(--muted)}
 
+.presales-workflow-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.presales-workflow-card{position:relative;min-height:270px;padding:18px 18px 58px;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--panel)}
+.presales-workflow-card:not(:last-child):after{content:'→';position:absolute;z-index:2;right:-8px;top:30px;color:var(--purple-2)}
+.presales-workflow-card>div{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.presales-workflow-card>div>b{color:var(--purple-2);font:600 9px 'IBM Plex Mono',monospace}
+.presales-workflow-card>div>em{padding:5px 7px;border-radius:999px;background:rgba(255,255,255,.035);color:var(--muted);font-size:9px;font-style:normal}
+.presales-workflow-card.status-learning>div>em,.presales-workflow-card.status-improving>div>em{background:rgba(139,109,255,.09);color:var(--purple-2)}
+.presales-workflow-card.status-validation>div>em{background:rgba(72,169,255,.09);color:var(--blue)}
+.presales-workflow-card h3{margin:22px 0 9px;font-size:19px}
+.presales-workflow-card p{margin:0;color:var(--muted);font-size:11px;line-height:1.72}
+.presales-workflow-card>small{display:block;margin-top:14px;color:var(--muted);font-size:9px;line-height:1.65}
+.presales-workflow-card>button{position:absolute;left:18px;right:18px;bottom:16px;display:flex;align-items:center;justify-content:space-between;min-height:36px;padding:0;border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;color:var(--muted);font-size:10px;text-align:left;cursor:pointer}
+.presales-workflow-card>button:hover{color:var(--ink)}
+.context-selection [data-presales-stage="selection"]{border-color:rgba(139,109,255,.38);background:color-mix(in srgb,var(--panel) 94%,var(--purple))}
+.context-dashboard .presales-workflow-card{background:var(--card)}
+.solution-validation-references{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
+.solution-validation-reference{position:relative;min-height:154px;padding:15px 15px 48px;border:1px solid var(--line);border-radius:var(--radius-control);background:rgba(255,255,255,.018)}
+.solution-validation-reference.missing{border-style:dashed}
+.solution-validation-reference>div{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.solution-validation-reference span{font-size:12px;font-weight:700}
+.solution-validation-reference em{padding:4px 7px;border-radius:999px;background:rgba(72,169,255,.09);color:var(--blue);font-size:8px;font-style:normal}
+.solution-validation-reference p{margin:12px 0 7px;color:var(--muted);font-size:10px;line-height:1.7}
+.solution-validation-reference small{color:var(--muted);font-size:9px}
+.solution-validation-reference button{position:absolute;left:15px;right:15px;bottom:12px;display:flex;justify-content:space-between;padding:9px 0 0;border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;color:var(--muted);font-size:9px;cursor:pointer}
+.solution-validation-reference button:hover{color:var(--ink)}
+.solution-validation-empty{margin-top:18px;padding:18px;border:1px dashed var(--line-strong);border-radius:var(--radius-control);color:var(--muted);font-size:11px;text-align:center}
+
 @media(max-width:820px){
   :root{--control-height:44px}
   .page-heading h1{font-size:clamp(40px,11vw,54px)}
@@ -574,6 +601,8 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
   .labs-results-head>p,.labs-section-heading>p,.dashboard-section-heading>p{font-size:13px}
   .product-filter-options,.vendor-comparison-filter-options,.solutions-filter-options,.labs-filter-options{flex-wrap:wrap;overflow:visible}
   .solution-list-card,.experiment-card{min-height:0}
+  .presales-workflow-grid{grid-template-columns:1fr 1fr}
+  .presales-workflow-card:nth-child(2):after{display:none}
 }
 
 @media(max-width:650px){
@@ -616,5 +645,8 @@ button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid 
   .experiment-overview article,.experiment-detail-grid>section{padding:22px 20px!important}
   .solution-architecture-section,.solution-products-section,.solution-phases-section,.solution-risks-section,
   .experiment-environment,.experiment-review,.dialog-positioning,.dialog-section,.dialog-two-col section{padding-left:20px!important;padding-right:20px!important}
+  .presales-workflow-grid,.solution-validation-references{grid-template-columns:1fr}
+  .presales-workflow-card{min-height:230px}
+  .presales-workflow-card:not(:last-child):after{content:'↓';display:block;right:auto;left:24px;top:auto;bottom:-9px}
   .dialog-customer-problems ul,.workflow-list{grid-template-columns:1fr}.workflow-list li{min-height:0}
 }
