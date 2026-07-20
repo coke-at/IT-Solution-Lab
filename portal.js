@@ -224,6 +224,37 @@
   const routeAliases = { catalog: 'resources', vendors: 'resources', guide: 'resources' };
   const pageNodes = [...document.querySelectorAll('[data-page]')];
   const routeNodes = [...document.querySelectorAll('[data-route]')];
+  const menu = document.querySelector('#menuToggle');
+  let lastRenderedLocation = '';
+
+  function isMobileNavigation() {
+    return window.matchMedia('(max-width: 820px)').matches;
+  }
+
+  function syncMenuState() {
+    if (!menu) return;
+    const expanded = isMobileNavigation()
+      ? document.body.classList.contains('nav-open')
+      : !document.body.classList.contains('nav-closed');
+    menu.setAttribute('aria-expanded', String(expanded));
+    menu.setAttribute('aria-label', expanded ? '收起导航' : '展开导航');
+  }
+
+  function closeMobileNavigation() {
+    document.body.classList.remove('nav-open');
+    syncMenuState();
+  }
+
+  function toggleNavigation(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (isMobileNavigation()) {
+      document.body.classList.toggle('nav-open');
+    } else {
+      document.body.classList.toggle('nav-closed');
+    }
+    syncMenuState();
+  }
 
   function resolveRoute(raw) {
     const route = (raw || 'home').replace(/^#/, '');
@@ -242,11 +273,16 @@
     routeNodes.forEach(node => node.classList.toggle('active', node.dataset.route === route));
     document.body.dataset.route = route;
     document.title = pageTitles[route];
-    document.body.classList.remove('nav-open');
-    const menu = document.querySelector('#menuToggle');
-    if (menu) menu.setAttribute('aria-expanded', 'false');
+    closeMobileNavigation();
 
-    if (options.updateHash !== false) history.replaceState(null, '', `#${route}`);
+    const targetHash = `#${route}`;
+    if (options.historyMode === 'push' && location.hash !== targetHash) {
+      history.pushState({ route }, '', targetHash);
+    } else if (options.historyMode === 'replace' && location.hash !== targetHash) {
+      history.replaceState({ route }, '', targetHash);
+    }
+    lastRenderedLocation = `${location.pathname}${location.search}${location.hash}`;
+    document.dispatchEvent(new CustomEvent('portal:routechange', { detail: { route } }));
     if (options.scroll !== false) window.scrollTo({ top: 0, behavior: options.instant ? 'auto' : 'smooth' });
 
     if (route === 'resources' && routeAliases[originalRoute]) {
@@ -258,16 +294,21 @@
     const routeTarget = event.target.closest('[data-route]');
     if (routeTarget) {
       event.preventDefault();
-      showPage(routeTarget.dataset.route);
+      const route = resolveRoute(routeTarget.dataset.route);
+      const historyMode = document.body.dataset.route === route ? 'none' : 'push';
+      showPage(routeTarget.dataset.route, { historyMode });
     }
   });
 
-  window.addEventListener('hashchange', () => showPage(location.hash.slice(1), { updateHash: false }));
+  function restorePageFromHistory() {
+    const currentLocation = `${location.pathname}${location.search}${location.hash}`;
+    if (currentLocation === lastRenderedLocation) return;
+    showPage(location.hash.slice(1), { historyMode: 'none', instant: true });
+  }
 
-  const menu = document.querySelector('#menuToggle');
-  menu?.addEventListener('click', () => requestAnimationFrame(() => {
-    menu.setAttribute('aria-expanded', String(document.body.classList.contains('nav-open')));
-  }));
+  window.addEventListener('popstate', restorePageFromHistory);
+  window.addEventListener('hashchange', restorePageFromHistory);
+  menu?.addEventListener('click', toggleNavigation);
 
   const navToolsToggle = document.querySelector('[data-nav-tools]');
   const navToolsPanel = document.querySelector('#navToolsPanel');
@@ -325,7 +366,7 @@
       ];
       evidenceGrid.innerHTML = evidenceEntries.map(item => `
         <button class="home-evidence-entry" data-route="${item.route}">
-          <span>${item.code}</span><div><h3>${item.title}</h3><p>${item.detail}</p></div><b>→</b>
+          <span>${item.code}</span><div><h3>${item.title}</h3><p>${item.detail}</p></div><b aria-hidden="true">→</b>
         </button>`).join('');
     }
 
@@ -337,7 +378,7 @@
           <small>${domain.title}</small>
           <h3>${directionNames[domain.id]}</h3>
           <p>${domain.summary}</p>
-          <button data-route="technology">进入技术地图 →</button>
+          <button data-route="technology">进入技术地图 <span aria-hidden="true">→</span></button>
         </article>`).join('');
     }
 
@@ -349,7 +390,7 @@
           <div class="home-product-head"><b>${product.name}</b><small>${product.category}</small></div>
           <h3>${product.fullName}</h3>
           <p>${product.positioning}</p>
-          <button data-product-open="${product.id}">打开学习模板 →</button>
+          <button data-product-open="${product.id}">打开学习模板 <span aria-hidden="true">→</span></button>
         </article>`).join('');
     }
 
@@ -399,7 +440,7 @@
         <p>${domain.summary}</p>
         <div class="domain-status domain-status-text"><span>学习阶段</span><strong>${getTechnologyDisplayStatus(domain)}</strong></div>
         <div class="skill-chips">${domain.skills.map(skill => `<span>${skill}</span>`).join('')}</div>
-        <button class="technology-entry" ${entryAttribute}><span>${domain.entryLabel}</span><b>→</b></button>
+        <button class="technology-entry" ${entryAttribute}><span>${domain.entryLabel}</span><b aria-hidden="true">→</b></button>
       </article>`;
     }).join('');
   }
@@ -476,7 +517,7 @@
           <h3>${stage.title}</h3>
           <p>${stage.detail}</p>
           <small>${stage.evidence}</small>
-          <button ${action}>${stage.actionLabel} <b>→</b></button>
+          <button ${action}>${stage.actionLabel} <b aria-hidden="true">→</b></button>
         </article>`;
     }).join('');
   }
@@ -501,7 +542,7 @@
       <article class="dashboard-capability-card">
         <div><span>${item.code}</span><small>${item.evidence}</small></div>
         <h3>${item.title}</h3><b>${item.value}</b><p>${item.detail}</p>
-        <button ${dashboardRouteAttribute(item.route)}>查看已有证据 <b>→</b></button>
+        <button ${dashboardRouteAttribute(item.route)}>查看已有证据 <b aria-hidden="true">→</b></button>
       </article>`).join('');
 
     technologyGrid.innerHTML = technologyDomains.map(domain => {
@@ -512,7 +553,7 @@
           <p>${domain.summary}</p>
           <div class="dashboard-technology-progress dashboard-technology-stage"><span>学习阶段</span><strong>${getTechnologyDisplayStatus(domain)}</strong></div>
           <div class="dashboard-skill-list">${domain.skills.map(skill => `<span>${skill}</span>`).join('')}</div>
-          <button class="dashboard-technology-entry" ${entryAttribute}>进入相关模块 <b>→</b></button>
+          <button class="dashboard-technology-entry" ${entryAttribute}>进入相关模块 <b aria-hidden="true">→</b></button>
         </article>`;
     }).join('');
 
@@ -523,7 +564,7 @@
       { code: 'V', title: '厂商分析', value: vendorComparisons.length, detail: `${stats.vendorDomains.size} 个领域覆盖`, route: 'comparison' }
     ];
     progressGrid.innerHTML = progress.map(item => `
-      <article class="dashboard-progress-card"><div><i>${item.code}</i><span>${item.title}</span></div><b>${item.value}</b><p>${item.detail}</p><button ${dashboardRouteAttribute(item.route)}>查看记录 <b>→</b></button></article>`).join('');
+      <article class="dashboard-progress-card"><div><i>${item.code}</i><span>${item.title}</span></div><b>${item.value}</b><p>${item.detail}</p><button ${dashboardRouteAttribute(item.route)}>查看记录 <b aria-hidden="true">→</b></button></article>`).join('');
 
     renderPresalesWorkflow('dashboardPresalesWorkflow');
 
@@ -536,7 +577,7 @@
       improvingSolution && { label: '沉淀方案证据', title: `完善“${improvingSolution.name}”`, detail: `当前阶段：${improvingSolution.stage}`, route: 'solutions' }
     ].filter(Boolean);
     nextList.innerHTML = suggestions.map((item, index) => `
-      <article class="dashboard-next-item"><span>${String(index + 1).padStart(2, '0')}</span><div><small>${item.label}</small><h3>${item.title}</h3><p>${item.detail}</p></div><button ${dashboardRouteAttribute(item.route)} aria-label="${item.title}">进入 <b>→</b></button></article>`).join('');
+      <article class="dashboard-next-item"><span>${String(index + 1).padStart(2, '0')}</span><div><small>${item.label}</small><h3>${item.title}</h3><p>${item.detail}</p></div><button ${dashboardRouteAttribute(item.route)} aria-label="${item.title}">进入 <b aria-hidden="true">→</b></button></article>`).join('');
 
     const evidence = [
       { code: '01', title: '技术能力', detail: `${stats.completedDomains} 个方向已完成阶段，${stats.currentDomains} 个方向正在学习`, route: 'technology', label: '技术地图' },
@@ -546,7 +587,7 @@
       { code: '05', title: '选型能力', detail: `${vendorComparisons.length} 家厂商分析，覆盖 ${stats.vendorDomains.size} 个产品领域`, route: 'comparison', label: '厂商对比' }
     ];
     evidenceChain.innerHTML = evidence.map(item => `
-      <li><div class="dashboard-evidence-index"><span>${item.code}</span><i></i></div><div class="dashboard-evidence-copy"><small>${item.label}</small><h3>${item.title}</h3><p>${item.detail}</p></div><button ${dashboardRouteAttribute(item.route)}>查看 <b>→</b></button></li>`).join('');
+      <li><div class="dashboard-evidence-index"><span>${item.code}</span><i></i></div><div class="dashboard-evidence-copy"><small>${item.label}</small><h3>${item.title}</h3><p>${item.detail}</p></div><button ${dashboardRouteAttribute(item.route)}>查看 <b aria-hidden="true">→</b></button></li>`).join('');
   }
 
   const vendorComparisonFilterState = { vendor: '全部', domain: '全部' };
@@ -664,16 +705,16 @@
       <article class="experiment-card">
         <div class="experiment-card-index"><span>${String(index + 1).padStart(2, '0')} / LAB</span><em class="status-${getLabStatusClass(lab.status)}">${getLabDisplayStatus(lab.status)}</em></div>
         <div class="experiment-card-copy"><div class="experiment-meta"><span>${lab.direction}</span><i>${lab.type}</i></div><h3>${lab.name}</h3><p>${lab.summary}</p></div>
-        <div class="experiment-card-action"><small>当前阶段</small><strong>${lab.stage}</strong><button data-experiment-open="${lab.id}">查看实验详情 <b>→</b></button></div>
+        <div class="experiment-card-action"><small>当前阶段</small><strong>${lab.stage}</strong><button data-experiment-open="${lab.id}">查看实验详情 <b aria-hidden="true">→</b></button></div>
       </article>`).join('');
   }
 
   function labTopologyTemplate() {
     return `
       <div class="topology-canvas">
-        <div class="topo-node cloud"><i>WAN</i><b>互联网</b><small>203.0.113.0/24</small></div><span class="topo-line"><em>非信任区</em></span>
+        <div class="topo-node cloud"><i>WAN</i><b>互联网</b><small>文档示例外网地址（203.0.113.0/24）</small></div><span class="topo-line"><em>示例非信任区</em></span>
         <div class="topo-node firewall"><i>AF</i><b>防火墙</b><small>NAT · 策略 · 日志</small></div><span class="topo-line"><em>信任区</em></span>
-        <div class="topo-node switch"><i>SW</i><b>核心交换</b><small>VLAN 10 / 20</small></div><span class="topo-line split-line"><em>局域网</em></span>
+        <div class="topo-node switch"><i>SW</i><b>核心交换</b><small>示例业务 VLAN / 示例办公 VLAN</small></div><span class="topo-line split-line"><em>示例局域网</em></span>
         <div class="topo-branches"><div class="topo-node small"><i>PC</i><b>测试终端</b></div><div class="topo-node small"><i>SRV</i><b>业务服务器</b></div></div>
       </div>`;
   }
@@ -761,7 +802,7 @@
       <article class="solution-list-card">
         <div class="solution-list-index"><span>${String(index + 1).padStart(2, '0')} / SOLUTION</span><em class="status-${getSolutionStatusClass(solution.status)}">${solution.status}</em></div>
         <div class="solution-list-copy"><div class="solution-list-meta"><span>${solution.scenario}</span><i>${solution.templateType}</i></div><h3>${solution.name}</h3><p>${solution.summary}</p><small>适用对象 · ${solution.audience}</small></div>
-        <div class="solution-list-action"><small>当前阶段</small><strong>${solution.stage}</strong><div>${solution.domains.map(domain => `<span>${domain}</span>`).join('')}</div><button data-solution-open="${solution.id}">查看方案详情 <b>→</b></button></div>
+        <div class="solution-list-action"><small>当前阶段</small><strong>${solution.stage}</strong><div>${solution.domains.map(domain => `<span>${domain}</span>`).join('')}</div><button data-solution-open="${solution.id}">查看方案详情 <b aria-hidden="true">→</b></button></div>
       </article>`).join('');
   }
 
@@ -797,7 +838,7 @@
       if (!lab) {
         return `<article class="solution-validation-reference missing"><div><span>验证内容待关联</span><em>未开始</em></div><p>${reference.scope || '验证范围待补充'}</p><small>实验引用 · ${reference.labId}</small></article>`;
       }
-      return `<article class="solution-validation-reference"><div><span>${lab.name}</span><em>${getLabDisplayStatus(lab.status)}</em></div><p>验证范围 · ${reference.scope}</p><small>实验阶段 · ${lab.stage}</small><button data-experiment-open="${lab.id}">查看验证准备 <b>→</b></button></article>`;
+      return `<article class="solution-validation-reference"><div><span>${lab.name}</span><em>${getLabDisplayStatus(lab.status)}</em></div><p>验证范围 · ${reference.scope}</p><small>实验阶段 · ${lab.stage}</small><button data-experiment-open="${lab.id}">查看验证准备 <b aria-hidden="true">→</b></button></article>`;
     }).join('');
   }
 
@@ -871,7 +912,7 @@
         <div class="product-symbol">${product.name}</div>
         <small>${product.category}</small><h2>${product.name} · ${product.fullName}</h2><p>${product.positioning}</p>
         <div class="product-progress product-state"><span>${getProductDisplayStatus(product)} · ${getProductEvidenceStatus(product)}</span></div>
-        <button data-product-open="${product.id}">进入产品实验室 <b>→</b></button>
+        <button data-product-open="${product.id}">进入产品实验室 <b aria-hidden="true">→</b></button>
       </article>`).join('');
   }
 
@@ -1006,5 +1047,12 @@
   renderSolutionsCenter();
   renderLabCenter();
   renderProductLabs();
-  showPage(location.hash.slice(1) || 'home', { updateHash: false, scroll: false, instant: true });
+  const initialRoute = location.hash.slice(1);
+  const initialRouteIsKnown = Boolean(pageTitles[initialRoute] || routeAliases[initialRoute]);
+  showPage(initialRoute || 'home', {
+    historyMode: initialRoute && initialRouteIsKnown ? 'none' : 'replace',
+    scroll: false,
+    instant: true
+  });
+  syncMenuState();
 })();

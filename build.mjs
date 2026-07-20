@@ -8,5 +8,9 @@ try {
   await access('public/og.png');
   await cp('public/og.png','dist/client/og.png');
 } catch {}
+try {
+  await access('public/favicon.svg');
+  await cp('public/favicon.svg','dist/client/favicon.svg');
+} catch {}
 await cp('server/index.js','dist/server/index.js');
 await cp('.openai/hosting.json','dist/.openai/hosting.json');
