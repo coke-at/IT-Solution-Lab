@@ -302,6 +302,16 @@
           <button data-product-open="${product.id}">打开学习模板 →</button>
         </article>`).join('');
     }
+
+    const homeLabList = document.querySelector('#homeLabList');
+    if (homeLabList) {
+      homeLabList.innerHTML = labExperiments.length ? labExperiments.slice(0, 3).map(lab => `
+        <article>
+          <div><small>${lab.direction} · ${lab.type}</small><h3>${lab.name}</h3></div>
+          <span class="lab-state ${getLabStatusClass(lab.status)}">${lab.status}</span>
+          <button data-experiment-open="${lab.id}">查看详情</button>
+        </article>`).join('') : '<p class="home-lab-empty">当前还没有实验记录。</p>';
+    }
   }
 
   function renderTechnologyMap() {
@@ -348,10 +358,10 @@
 
     const capabilities = [
       { code: '01', title: '技术能力', value: `${stats.completedDomains}/${technologyDomains.length}`, detail: `${stats.currentDomains} 个方向正在学习`, evidence: '技术地图', route: 'technology' },
-      { code: '02', title: '产品能力', value: productLabs.length, detail: `${stats.templateProducts} 个模板已建立`, evidence: 'Product Lab', route: 'products' },
-      { code: '03', title: '实验能力', value: labExperiments.length, detail: `${stats.activeLabs} 个实验进行中`, evidence: 'Labs 实验记录', route: 'labs' },
-      { code: '04', title: '方案能力', value: solutionCases.length, detail: `${stats.architectureSolutions} 个方案已建立架构`, evidence: 'Solutions 模板', route: 'solutions' },
-      { code: '05', title: '选型能力', value: vendorComparisons.length, detail: `${stats.vendorDomains.size} 个产品领域已分析`, evidence: 'Vendor Comparison', route: 'comparison' }
+      { code: '02', title: '产品能力', value: productLabs.length, detail: `${stats.templateProducts} 个模板已建立`, evidence: '产品实验室', route: 'products' },
+      { code: '03', title: '实验能力', value: labExperiments.length, detail: `${stats.activeLabs} 个实验进行中`, evidence: '实验记录', route: 'labs' },
+      { code: '04', title: '方案能力', value: solutionCases.length, detail: `${stats.architectureSolutions} 个方案已建立架构`, evidence: '方案模板', route: 'solutions' },
+      { code: '05', title: '选型能力', value: vendorComparisons.length, detail: `${stats.vendorDomains.size} 个产品领域已分析`, evidence: '厂商对比', route: 'comparison' }
     ];
     capabilityGrid.innerHTML = capabilities.map(item => `
       <article class="dashboard-capability-card">
@@ -395,10 +405,10 @@
 
     const evidence = [
       { code: '01', title: '技术能力', detail: `${stats.completedDomains} 个方向已完成阶段，${stats.currentDomains} 个方向正在学习`, route: 'technology', label: '技术地图' },
-      { code: '02', title: '产品能力', detail: `${productLabs.length} 个产品模板，其中 ${stats.templateProducts} 个已建立模板`, route: 'products', label: 'Product Lab' },
-      { code: '03', title: '实验能力', detail: `${labExperiments.length} 条实验记录，${stats.completedLabs} 个已完成`, route: 'labs', label: 'Labs' },
-      { code: '04', title: '方案能力', detail: `${solutionCases.length} 个方案模板，${stats.architectureSolutions} 个已建立架构`, route: 'solutions', label: 'Solutions' },
-      { code: '05', title: '选型能力', detail: `${vendorComparisons.length} 家厂商分析，覆盖 ${stats.vendorDomains.size} 个产品领域`, route: 'comparison', label: 'Vendor Comparison' }
+      { code: '02', title: '产品能力', detail: `${productLabs.length} 个产品模板，其中 ${stats.templateProducts} 个已建立模板`, route: 'products', label: '产品实验室' },
+      { code: '03', title: '实验能力', detail: `${labExperiments.length} 条实验记录，${stats.completedLabs} 个已完成`, route: 'labs', label: '实验中心' },
+      { code: '04', title: '方案能力', detail: `${solutionCases.length} 个方案模板，${stats.architectureSolutions} 个已建立架构`, route: 'solutions', label: '解决方案中心' },
+      { code: '05', title: '选型能力', detail: `${vendorComparisons.length} 家厂商分析，覆盖 ${stats.vendorDomains.size} 个产品领域`, route: 'comparison', label: '厂商对比' }
     ];
     evidenceChain.innerHTML = evidence.map(item => `
       <li><div class="dashboard-evidence-index"><span>${item.code}</span><i></i></div><div class="dashboard-evidence-copy"><small>${item.label}</small><h3>${item.title}</h3><p>${item.detail}</p></div><button ${dashboardRouteAttribute(item.route)}>查看 <b>→</b></button></li>`).join('');
