@@ -52,7 +52,7 @@
         <a href="#products" data-route="products"><i>03</i><span class="nav-copy"><b>产品实验室</b><small>Product Lab</small></span></a>
         <a href="#comparison" data-route="comparison"><i>04</i><span class="nav-copy"><b>厂商对比</b><small>Vendor Comparison</small></span></a>
         <a href="#solutions" data-route="solutions"><i>05</i><span class="nav-copy"><b>解决方案中心</b><small>Solution Center</small></span></a>
-        <a href="#labs" data-route="labs"><i>06</i><span class="nav-copy"><b>实验室</b><small>Lab</small></span></a>
+        <a href="#labs" data-route="labs"><i>06</i><span class="nav-copy"><b>实验中心</b><small>Labs</small></span></a>
       </div>
 
       <div class="nav-group" aria-labelledby="nav-resources">
@@ -140,12 +140,7 @@
           <div class="home-section-heading">
             <div><span>RECENT UPDATES</span><h2>最近更新</h2></div>
           </div>
-          <div class="home-update-list">
-            <button data-route="labs"><span>实验室</span><b>企业出口安全模拟实验框架已建立</b><i>查看</i></button>
-            <button data-product-open="af"><span>产品实验室</span><b>AF 产品学习模板已建立</b><i>查看</i></button>
-            <button data-route="comparison"><span>厂商对比</span><b>企业出口安全场景对比已建立</b><i>查看</i></button>
-            <button data-route="solutions"><span>解决方案</span><b>成长型企业升级方案模板已建立</b><i>查看</i></button>
-          </div>
+          <div class="home-update-list" id="homeUpdateList"></div>
         </section>
       </div>
     </section>
@@ -158,13 +153,7 @@
         </div>
         <section class="technology-stage-section" aria-labelledby="technologyStageTitle">
           <div class="technology-section-heading"><div><span>LEARNING STAGES</span><h2 id="technologyStageTitle">学习阶段</h2></div><p>先建立基础认知，再逐步进入网络、安全、云计算与方案设计。</p></div>
-          <ol class="technology-stage-flow">
-            <li class="completed"><b>01</b><span>基础能力<small>基础认知已建立</small></span></li>
-            <li class="completed"><b>02</b><span>网络<small>已完成阶段</small></span></li>
-            <li class="current"><b>03</b><span>安全<small>当前学习重点</small></span></li>
-            <li><b>04</b><span>云计算<small>待系统补全</small></span></li>
-            <li><b>05</b><span>解决方案<small>目标能力</small></span></li>
-          </ol>
+          <ol class="technology-stage-flow" id="technologyStageFlow"></ol>
         </section>
         <div class="technology-section-heading domain-heading"><div><span>TECHNOLOGY DOMAINS</span><h2>技术领域</h2></div><p>围绕四个核心方向整理知识节点、当前状态与后续学习入口。</p></div>
         <div class="technology-grid" id="technologyGrid"></div>
@@ -178,7 +167,7 @@
             <li><button data-tech-focus="network"><b>01</b><span>网络基础<small>协议、交换、路由与流量路径</small></span><i>查看领域</i></button></li>
             <li><button data-tech-focus="security"><b>02</b><span>网络安全<small>边界、身份、终端与安全运营</small></span><i>查看领域</i></button></li>
             <li><button data-route="products"><b>03</b><span>产品配置<small>用统一模板理解和配置产品</small></span><i>进入产品实验室</i></button></li>
-            <li><button data-route="labs"><b>04</b><span>实验验证<small>通过拓扑、配置与测试验证知识</small></span><i>进入实验室</i></button></li>
+            <li><button data-route="labs"><b>04</b><span>实验验证<small>通过拓扑、配置与测试验证知识</small></span><i>进入实验中心</i></button></li>
             <li><button data-route="solutions"><b>05</b><span>解决方案设计<small>把技术能力转化为客户方案</small></span><i>进入方案中心</i></button></li>
           </ol>
         </section>
@@ -192,9 +181,9 @@
           <p>围绕企业 IT 产品，系统整理产品定位、核心功能、配置实践、故障排查与售前思考。</p>
         </div>
         <div class="product-lab-stats" aria-label="产品实验室统计">
-          <div><b>6</b><span>已整理产品</span></div>
-          <div><b>3</b><span>规划厂商</span></div>
-          <div><b>3</b><span>已有分类</span></div>
+          <div><b id="productStatCount">0</b><span>已整理产品</span></div>
+          <div><b id="productStatVendors">0</b><span>已有厂商</span></div>
+          <div><b id="productStatCategories">0</b><span>已有分类</span></div>
         </div>
         <section class="template-strip">
           <div><span>LEARNING TEMPLATE</span><h2>统一的产品学习模板</h2><p>每个产品都按同一套结构持续整理。</p></div>
@@ -308,11 +297,11 @@
           <div class="dashboard-capability-grid" id="dashboardCapabilityGrid"></div>
         </section>
         <section class="dashboard-section dashboard-technology-section" aria-labelledby="dashboardTechnologyTitle">
-          <div class="dashboard-section-heading"><div><span>TECHNOLOGY GROWTH</span><h2 id="dashboardTechnologyTitle">技术成长地图</h2></div><p>复用技术地图中的能力自评、学习状态和技能范围。</p></div>
+          <div class="dashboard-section-heading"><div><span>TECHNOLOGY GROWTH</span><h2 id="dashboardTechnologyTitle">技术成长地图</h2></div><p>复用技术地图中的学习阶段、当前状态和技能范围。</p></div>
           <div class="dashboard-technology-grid" id="dashboardTechnologyGrid"></div>
         </section>
         <section class="dashboard-section dashboard-progress-section" aria-labelledby="dashboardProgressTitle">
-          <div class="dashboard-section-heading"><div><span>LEARNING PROGRESS</span><h2 id="dashboardProgressTitle">学习进度</h2></div><p>统计来自 Product Lab、Labs、Solutions 与 Vendor Comparison 的现有记录。</p></div>
+          <div class="dashboard-section-heading"><div><span>LEARNING PROGRESS</span><h2 id="dashboardProgressTitle">学习进度</h2></div><p>统计来自产品实验室、实验中心、解决方案中心与厂商对比的现有记录。</p></div>
           <div class="dashboard-progress-grid" id="dashboardProgressGrid"></div>
         </section>
         <section class="dashboard-section dashboard-next-section" aria-labelledby="dashboardNextTitle">
