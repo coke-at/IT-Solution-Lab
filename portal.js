@@ -314,6 +314,21 @@
   }
 
   function renderHomeContent() {
+    const evidenceGrid = document.querySelector('#homeEvidenceGrid');
+    if (evidenceGrid) {
+      const evidenceEntries = [
+        { code: '01', title: '产品学习', detail: `${productLabs.length} 个产品学习模板`, route: 'products' },
+        { code: '02', title: '实验验证', detail: `${labExperiments.length} 条个人验证记录`, route: 'labs' },
+        { code: '03', title: '方案设计', detail: `${solutionCases.length} 个模板方案`, route: 'solutions' },
+        { code: '04', title: '选型分析', detail: `${vendorComparisons.length} 家厂商分析`, route: 'comparison' },
+        { code: '05', title: '能力看板', detail: `${technologyDomains.length} 个技术方向持续积累`, route: 'dashboard' }
+      ];
+      evidenceGrid.innerHTML = evidenceEntries.map(item => `
+        <button class="home-evidence-entry" data-route="${item.route}">
+          <span>${item.code}</span><div><h3>${item.title}</h3><p>${item.detail}</p></div><b>→</b>
+        </button>`).join('');
+    }
+
     const directionGrid = document.querySelector('#homeDirectionGrid');
     const directionNames = { network: '网络', security: '安全', cloud: '云计算', solution: '解决方案架构' };
     if (directionGrid) {

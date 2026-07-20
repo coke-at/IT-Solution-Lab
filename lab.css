@@ -149,8 +149,9 @@ button{color:inherit}
 .page-heading>p,.section-heading>p{margin:0;color:var(--muted);font-size:13px;line-height:1.8}
 
 .page-frame.home-frame{padding-top:0}
-.lab-hero{min-height:calc(100vh - var(--topbar));min-height:calc(100svh - var(--topbar));display:flex;align-items:center;padding:88px 0 104px!important;border-bottom:1px solid var(--line)}
+.lab-hero{min-height:calc(100vh - var(--topbar) - 48px);min-height:calc(100svh - var(--topbar) - 48px);display:flex;align-items:center;padding:88px 0 104px!important;border-bottom:1px solid var(--line)}
 .hero-copy{width:100%;max-width:980px}
+.hero-eyebrow{display:block;margin-bottom:24px;color:var(--purple-2);font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.08em}
 .eyebrow{display:flex;align-items:center;gap:14px;color:var(--purple-2);font-size:9px}
 .eyebrow b{color:var(--muted);font-weight:500}
 .eyebrow b:before{content:'';display:inline-block;width:25px;height:1px;margin-right:14px;vertical-align:middle;background:var(--line-strong)}
@@ -169,6 +170,16 @@ button{color:inherit}
 .primary-action b{margin-left:28px}
 .secondary-action{background:rgba(255,255,255,.02)}
 .secondary-action:hover{background:rgba(139,109,255,.1);border-color:rgba(139,109,255,.35)}
+
+.home-evidence-section{padding:30px 0 36px!important;border-bottom:1px solid var(--line)}
+.home-evidence-heading{display:flex;align-items:end;justify-content:space-between;gap:36px;margin-bottom:18px}
+.home-evidence-heading>div>span{color:var(--purple-2);font:600 9px 'IBM Plex Mono',monospace;letter-spacing:.08em}
+.home-evidence-heading h2{margin:6px 0 0;font-size:21px;letter-spacing:0}
+.home-evidence-heading>p{max-width:520px;margin:0;color:var(--muted);font-size:11px;line-height:1.7}
+.home-evidence-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}
+.home-evidence-entry{position:relative;min-width:0;min-height:106px;display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:start;gap:10px;padding:18px 15px;border:0;border-right:1px solid var(--line);border-radius:0;background:transparent;color:var(--ink);text-align:left;cursor:pointer}
+.home-evidence-entry:last-child{border-right:0}.home-evidence-entry:hover{background:rgba(255,255,255,.025)}
+.home-evidence-entry>span{color:var(--purple-2);font:600 8px 'IBM Plex Mono',monospace}.home-evidence-entry h3{margin:0 0 8px;font-size:13px;letter-spacing:0}.home-evidence-entry p{margin:0;color:var(--muted);font-size:9px;line-height:1.6}.home-evidence-entry>b{color:var(--muted);font-size:12px}.home-evidence-entry:hover>b{color:var(--purple-2)}
 
 .hero-system{border:1px solid var(--line);border-radius:22px;background:linear-gradient(160deg,rgba(25,31,49,.84),rgba(9,13,24,.82));box-shadow:var(--glow),inset 0 1px rgba(255,255,255,.04);overflow:hidden}
 .system-head,.system-foot{height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line);color:var(--muted);font-size:8px}
@@ -316,6 +327,8 @@ html.light .vendor-map .vendor-card>button{color:var(--purple)!important}
 @media(max-width:1050px){
   .role-chip{display:none}
   .lab-hero{padding-top:76px!important;padding-bottom:88px!important}
+  .home-evidence-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .home-evidence-entry{border-bottom:1px solid var(--line)}.home-evidence-entry:nth-child(3){border-right:0}.home-evidence-entry:nth-child(n+4){border-bottom:0}
   .home-direction-grid,.home-product-grid{grid-template-columns:1fr 1fr}.home-product-card:last-child{grid-column:1/-1}
   .learning-path-card{grid-template-columns:1fr}.path-nodes{margin-top:3px}
   .vendor-fit-grid{grid-template-columns:1fr 1fr}.vendor-fit-grid article:last-child{grid-column:1/-1}
@@ -344,6 +357,7 @@ html.light .vendor-map .vendor-card>button{color:var(--purple)!important}
   .technology-section-heading{grid-template-columns:1fr;gap:12px}.technology-section-heading>p{max-width:620px}
   .technology-grid{grid-template-columns:1fr}.technology-card{min-height:390px}
   .journey-track{grid-template-columns:1fr;gap:22px}.journey-track:before{left:20px;right:auto;top:20px;bottom:20px;width:1px;height:auto;background:linear-gradient(var(--purple),var(--line))}.journey-track article{padding-right:0}
+  .home-evidence-heading{display:grid;grid-template-columns:1fr;gap:10px}.home-evidence-heading>p{max-width:620px}
   .home-section{padding:66px 0!important}.home-section-heading{display:grid;grid-template-columns:1fr;gap:15px}.home-section-heading>p{max-width:640px}
   .home-product-grid{grid-template-columns:1fr}.home-product-card:last-child{grid-column:auto}.home-update-list{grid-template-columns:1fr}
   .dashboard-metrics{grid-template-columns:1fr 1fr}
@@ -356,7 +370,9 @@ html.light .vendor-map .vendor-card>button{color:var(--purple)!important}
   .page-frame{padding:28px 17px 60px}
   .page-heading h1{font-size:43px}.page-heading{padding-bottom:23px}
   .lab-hero{min-height:calc(100svh - 68px);padding:62px 0 72px!important}.hero-copy h1{margin-bottom:30px;font-size:60px}.hero-positioning{font-size:24px}.hero-description{margin-top:16px;font-size:15px;line-height:1.8}
+  .hero-eyebrow{margin-bottom:20px;font-size:9px}
   .hero-actions{margin-top:34px;flex-direction:column}.hero-actions button{width:100%}
+  .home-evidence-section{padding:26px 0 30px!important}.home-evidence-grid{grid-template-columns:1fr}.home-evidence-entry{min-height:88px;border-right:0;border-bottom:1px solid var(--line)}.home-evidence-entry:nth-child(3),.home-evidence-entry:nth-child(n+4){border-bottom:1px solid var(--line)}.home-evidence-entry:last-child{border-bottom:0}
   .system-canvas{min-height:330px}.orbit-one{width:190px;height:190px}.orbit-two{width:270px;height:270px}.system-node{padding:7px 9px}.system-node i{width:22px;height:22px}.node-network{left:3%;top:18%}.node-security{right:2%;top:17%}.node-cloud{right:2%;bottom:15%}.node-lab{left:3%;bottom:16%}
   .home-section{padding:54px 0!important}.home-section-heading{margin-bottom:28px}.home-section-heading h2{font-size:28px}.home-direction-grid{grid-template-columns:1fr}.home-direction-card{min-height:170px}.home-product-card{min-height:230px}.home-lab-list article{grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:17px 0}.home-lab-list button{grid-column:1/-1;text-align:left}.home-update-list button{grid-template-columns:78px minmax(0,1fr) auto;gap:10px}.home-update-list b{white-space:normal;line-height:1.55}
   .product-lab-grid,.vendor-fit-grid{grid-template-columns:1fr}.vendor-fit-grid article:last-child{grid-column:auto}
