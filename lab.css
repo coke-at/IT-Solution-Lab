@@ -380,3 +380,223 @@ html.light .vendor-map .vendor-card>button{color:var(--purple)!important}
 }
 
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.page.active{animation:none}*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
+/* Phase 2: shared interaction and hierarchy rules for existing learning pages. */
+:root{
+  --radius-control:8px;
+  --radius-card:12px;
+  --radius-surface:16px;
+  --control-height:40px;
+}
+
+button,a,[tabindex]{-webkit-tap-highlight-color:transparent}
+button{transition:border-color .18s ease,background-color .18s ease,color .18s ease,opacity .18s ease,transform .18s ease,box-shadow .18s ease}
+button:disabled{opacity:.42!important;cursor:not-allowed!important;transform:none!important;box-shadow:none!important}
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--purple-2);outline-offset:3px}
+
+.primary-action,.secondary-action,.home-section-action,
+.product-filter-options button,.vendor-comparison-filter-options button,.solutions-filter-options button,.labs-filter-options button,
+.technology-entry,.product-lab-card>button,.solution-list-action button,.experiment-card-action button,
+.dashboard-technology-entry,.dashboard-next-item>button{
+  min-height:var(--control-height);
+  border-radius:var(--radius-control);
+}
+.home-direction-card button,.home-product-card button,.home-lab-list button,
+.dashboard-capability-card>button,.dashboard-progress-card>button,.dashboard-evidence-chain button{
+  min-height:var(--control-height);
+}
+.product-filter-options button:hover:not(:disabled),.vendor-comparison-filter-options button:hover:not(:disabled),
+.solutions-filter-options button:hover:not(:disabled),.labs-filter-options button:hover:not(:disabled){
+  border-color:var(--line-strong);
+  background:rgba(255,255,255,.035);
+  color:var(--ink);
+}
+
+.nav-label,.side-nav a,.side-nav button,.home-section-action,
+.product-filter-options button,.vendor-comparison-filter-options button,.solutions-filter-options button,.labs-filter-options button,
+.solution-list-meta span,.solution-list-meta i,.solution-list-action>div span,.experiment-meta span,.experiment-meta i,
+.lab-state,.solution-list-index>em,.solution-dialog-head em,.experiment-card-index>em,.experiment-dialog-head em,
+.dashboard-technology-head em,.dashboard-skill-list span,.solution-dialog-head>strong,.solution-product-reference,
+.experiment-environment-meta>div,.experiment-environment-meta span,.module-grid article,.module-grid b,.workflow-list li{
+  border-radius:var(--radius-control);
+}
+.home-direction-card,.home-product-card,.technology-card,.product-lab-card,.future-vendor-card,
+.solution-list-card,.experiment-card,.dashboard-capability-card,.dashboard-technology-card,.dashboard-progress-card,
+.solutions-empty-state,.labs-empty-state,.product-empty-state,.vendor-comparison-empty{
+  border-radius:var(--radius-card);
+}
+.template-strip,.product-filter-panel,.vendor-comparison-intro,.vendor-comparison-filters,.vendor-comparison-matrix,
+.solutions-stat-grid,.solutions-filter-panel,.solutions-method-flow,.labs-stat-grid,.labs-filter-panel,.labs-method-flow,
+.labs-evidence-grid,.dashboard-evidence-chain,.resource-search-panel,.lab-dialog,.solution-dialog,.lab-experiment-dialog{
+  border-radius:var(--radius-surface);
+}
+
+.page-heading h1{font-size:clamp(46px,5vw,72px);letter-spacing:-.04em}
+.home-section-heading h2,.technology-section-heading h2,.product-results-head h2,
+.vendor-comparison-results-head h2,.vendor-comparison-section-heading h2,
+.solutions-results-head h2,.solutions-section-heading h2,.labs-results-head h2,.labs-section-heading h2,
+.dashboard-section-heading h2{
+  font-size:clamp(24px,2.2vw,30px);
+  line-height:1.25;
+  letter-spacing:0;
+}
+.home-section-heading>div>span,.technology-section-heading>div>span,
+.vendor-comparison-results-head>div>span,.vendor-comparison-section-heading>div>span,
+.solutions-results-head>div>span,.solutions-section-heading>div>span,
+.labs-results-head>div>span,.labs-section-heading>div>span,.dashboard-section-heading>div>span{
+  font-size:9px;
+  opacity:.82;
+}
+.home-section-heading>p,.technology-section-heading>p,
+.vendor-comparison-results-head>p,.vendor-comparison-section-heading>p,
+.solutions-results-head>p,.solutions-section-heading>p,
+.labs-results-head>p,.labs-section-heading>p,.dashboard-section-heading>p{
+  font-size:12px;
+  line-height:1.75;
+}
+
+.home-direction-card>small,.home-product-head small,.home-lab-list small{font-size:10px;opacity:.75}
+.home-direction-card h3{font-size:21px}.home-direction-card p,.home-product-card p{font-size:12px;line-height:1.75}
+.home-direction-card button,.home-product-card button,.home-lab-list button{font-size:11px}
+.home-product-head small{max-width:62%;text-align:right}.home-product-card h3{font-size:22px}
+.home-lab-list article{min-height:88px}.home-lab-list h3{font-size:17px}.lab-state{font-size:10px}
+.home-lab-empty{margin:0;padding:28px 0;border-bottom:1px solid var(--line);color:var(--muted);font-size:13px}
+.home-update-list span,.home-update-list i{font-size:10px}.home-update-list b{font-size:12px}
+
+.product-lab-page{--experience-accent:var(--blue)}
+.solutions-center-page{--experience-accent:var(--purple-2)}
+.labs-center-page{--experience-accent:var(--green)}
+.product-lab-page .page-heading>div>span,.product-lab-page .product-results-head h2{color:var(--experience-accent)}
+.solutions-center-page .page-heading>div>span,.solutions-center-page .solutions-results-head>div>span,
+.solutions-center-page .solutions-section-heading>div>span{color:var(--experience-accent)}
+.labs-center-page .page-heading>div>span,.labs-center-page .labs-results-head>div>span,
+.labs-center-page .labs-section-heading>div>span{color:var(--experience-accent)}
+.product-lab-page .product-filter-options button.active,
+.solutions-center-page .solutions-filter-options button.active,
+.labs-center-page .labs-filter-options button.active{
+  border-color:color-mix(in srgb,var(--experience-accent) 34%,var(--line));
+  background:color-mix(in srgb,var(--experience-accent) 10%,transparent);
+  color:var(--ink);
+}
+
+.product-lab-stats span,.solutions-stat-grid span,.labs-stat-grid span{font-size:11px}
+.product-filter-row>span,.vendor-comparison-filter-row>span,.solutions-filter-row>span,.labs-filter-row>span{font-size:11px}
+.product-filter-options button,.vendor-comparison-filter-options button,.solutions-filter-options button,.labs-filter-options button{font-size:11px}
+.product-results-head span,.solutions-results-head>p,.labs-results-head>p{font-size:11px}
+.product-card-head{font-size:10px}.product-lab-card>small{font-size:11px}.product-lab-card h2{font-size:22px}
+.product-lab-card>p{font-size:12px;line-height:1.75}.product-progress span{font-size:10px}.product-lab-card>button{font-size:11px}
+.template-strip>div>span,.template-strip li b{font-size:9px}.template-strip p,.template-strip li{font-size:11px}
+
+.solutions-stat-grid,.labs-stat-grid{margin-bottom:12px}
+.solutions-filter-panel,.labs-filter-panel{margin-bottom:24px;padding:15px 17px!important}
+.solution-list-index>span,.experiment-card-index>span{font-size:10px}
+.solution-list-index>em,.solution-dialog-head em,.experiment-card-index>em,.experiment-dialog-head em{font-size:10px}
+.solution-list-meta span,.solution-list-meta i,.solution-list-action>div span,.experiment-meta span,.experiment-meta i{font-size:10px}
+.solution-list-copy h3,.experiment-card-copy h3{font-size:24px;line-height:1.3}
+.solution-list-copy p,.experiment-card-copy p{font-size:12px;line-height:1.75}
+.solution-list-copy>small,.solution-list-action>small,.experiment-card-action small{font-size:10px}
+.solution-list-action>strong,.experiment-card-action strong{font-size:13px}
+.solution-list-action button,.experiment-card-action button{font-size:12px;font-weight:650}
+.solutions-method-flow span,.labs-method-flow span{font-size:11px}.solutions-method-flow b,.labs-method-flow b{font-size:9px}
+.labs-evidence-grid span{font-size:12px}
+
+.dashboard-capability-card>div span,.dashboard-evidence-index span,.dashboard-next-item>span{font-size:9px}
+.dashboard-capability-card>div small,.dashboard-technology-head small,.dashboard-next-item small,.dashboard-evidence-copy small{font-size:10px}
+.dashboard-capability-card h3,.dashboard-evidence-copy h3{font-size:18px}
+.dashboard-capability-card>p,.dashboard-progress-card>p,.dashboard-next-item p,.dashboard-evidence-copy p{font-size:11px;line-height:1.7}
+.dashboard-capability-card>button,.dashboard-progress-card>button,.dashboard-next-item>button,.dashboard-evidence-chain button{font-size:11px}
+.dashboard-technology-card>p{font-size:12px;line-height:1.7}
+.dashboard-technology-progress span,.dashboard-technology-progress strong{font-size:10px}
+.dashboard-skill-list span{font-size:10px}.dashboard-technology-entry{font-size:11px}
+.dashboard-progress-card span{font-size:11px}
+
+.lab-dialog,.solution-dialog,.lab-experiment-dialog{max-height:90svh;overflow:auto}
+.lab-dialog>.x,.solution-dialog>.x,.lab-experiment-dialog>.x{
+  position:sticky;
+  z-index:5;
+  top:12px;
+  right:auto;
+  display:grid;
+  place-items:center;
+  width:44px;
+  height:44px;
+  margin:12px 12px -56px auto;
+  border:1px solid var(--line);
+  border-radius:var(--radius-control);
+  background:color-mix(in srgb,var(--panel) 94%,transparent);
+  color:var(--ink);
+  font-size:20px;
+  cursor:pointer;
+  backdrop-filter:blur(10px);
+}
+.lab-dialog>.x:hover,.solution-dialog>.x:hover,.lab-experiment-dialog>.x:hover{border-color:var(--line-strong);background:var(--panel)}
+.lab-dialog-head>span,.dialog-positioning>span,.dialog-section-title>span,.dialog-two-col section>span,
+.solution-dialog-head>span,.solution-detail-title>span,.solution-detail-overview article>span,
+.solution-goals-constraints article>span,.solution-state-section article>span,
+.experiment-dialog-head>span,.experiment-section-title>span,.experiment-overview article>span{font-size:10px}
+.lab-dialog-head p,.dialog-title p,.solution-dialog-head>p,.experiment-dialog-head>p{font-size:12px;line-height:1.75}
+.dialog-positioning p,.dialog-two-col ul,
+.solution-detail-overview p,.solution-state-section p,.solution-detail-overview ul,.solution-goals-constraints ul,
+.solution-risks-section ul,.solution-state-section ol,.solution-presales-check ul,
+.experiment-overview p,.experiment-review>p,.experiment-steps li,.experiment-tests>div{font-size:12px;line-height:1.75}
+.solution-dialog-head>small,.experiment-dialog-head>small,.solution-product-reference small,
+.solution-product-reference p,.solution-product-reference em,.solution-phase-list p,.solution-phase-list span,
+.solution-phase-list small,.solution-presales-check>small,.experiment-environment-meta small,.experiment-environment-meta span,
+.experiment-steps li>b,.experiment-tests b,.experiment-review>small{font-size:10px}
+.solution-detail-overview h3,.solution-goals-constraints h3,.solution-state-section h3,.solution-detail-title h3,
+.experiment-overview h3,.experiment-section-title h3,.dialog-positioning h3,.dialog-section-title h3,.dialog-two-col h3{font-size:18px}
+.solution-product-reference p{line-height:1.7}.solution-product-reference span{font-size:14px}.solution-phase-list strong{font-size:13px}
+
+@media(max-width:820px){
+  :root{--control-height:44px}
+  .page-heading h1{font-size:clamp(40px,11vw,54px)}
+  .home-section-heading>p,.technology-section-heading>p,
+  .vendor-comparison-results-head>p,.vendor-comparison-section-heading>p,
+  .solutions-results-head>p,.solutions-section-heading>p,
+  .labs-results-head>p,.labs-section-heading>p,.dashboard-section-heading>p{font-size:13px}
+  .product-filter-options,.vendor-comparison-filter-options,.solutions-filter-options,.labs-filter-options{flex-wrap:wrap;overflow:visible}
+  .solution-list-card,.experiment-card{min-height:0}
+}
+
+@media(max-width:650px){
+  .lab-hero{min-height:auto;padding:68px 0 64px!important}
+  .hero-copy h1{font-size:clamp(54px,16vw,64px);line-height:.88}
+  .hero-positioning{font-size:23px}.hero-description{font-size:14px}
+  .home-section{padding:48px 0!important}.home-section-heading{margin-bottom:24px}
+  .home-section-heading h2{font-size:26px}.home-section-heading>div>span{font-size:9px}
+  .home-direction-card,.home-product-card{min-height:0;padding:20px}
+  .home-direction-card button,.home-product-card button{margin-top:24px;padding-top:12px;border-top:1px solid var(--line)}
+  .home-lab-list article{grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:18px 0}
+  .home-lab-list button{grid-column:1/-1;width:100%;border-top:1px solid var(--line);text-align:left}
+  .home-update-list button{grid-template-columns:72px minmax(0,1fr) auto}
+  .product-lab-stats{grid-template-columns:repeat(3,1fr)}
+  .product-lab-stats div{min-width:0;padding:14px 10px;border-right:1px solid var(--line);border-bottom:0}
+  .product-lab-stats div:last-child{border-right:0}
+  .product-lab-stats span,.solutions-stat-grid span,.labs-stat-grid span,
+  .product-filter-row>span,.solutions-filter-row>span,.labs-filter-row>span,
+  .product-filter-options button,.solutions-filter-options button,.labs-filter-options button{font-size:12px}
+  .solutions-stat-grid>div,.labs-stat-grid>div{min-height:62px;align-items:center}
+  .solutions-filter-panel,.labs-filter-panel{padding:14px!important}
+  .solution-list-card,.experiment-card{padding:19px}
+  .solution-list-copy h3,.experiment-card-copy h3{font-size:22px}
+  .solution-list-action,.experiment-card-action{padding-left:0}
+  .solution-list-action button,.experiment-card-action button{width:100%}
+  .dashboard-progress-grid{grid-template-columns:1fr}
+  .dashboard-capability-card{min-height:205px}.dashboard-technology-card{min-height:365px}
+  .dashboard-capability-card>p,.dashboard-technology-card>p,.dashboard-progress-card>p,
+  .dashboard-next-item p,.dashboard-evidence-copy p{font-size:12px}
+  .dashboard-capability-card>button,.dashboard-progress-card>button,.dashboard-next-item>button,
+  .dashboard-evidence-chain button,.dashboard-technology-entry{font-size:12px}
+  .dashboard-next-item{grid-template-columns:30px minmax(0,1fr);padding:16px 0}
+  .dashboard-next-item>button{grid-column:2;width:100%;margin-top:4px}
+  .dashboard-evidence-chain li{min-height:176px;padding-bottom:62px}
+  .dashboard-evidence-chain button{left:18px;right:18px;bottom:14px;border-left:0;border-top:1px solid var(--line);padding-left:0}
+  .lab-dialog,.solution-dialog,.lab-experiment-dialog{width:calc(100vw - 16px);max-height:calc(100svh - 16px);border-radius:var(--radius-surface)}
+  .lab-dialog-head,.solution-dialog-head,.experiment-dialog-head{padding:27px 20px 24px}
+  .solution-dialog-head h2,.experiment-dialog-head h2,.dialog-title h2{font-size:24px;line-height:1.3}
+  .solution-detail-overview article,.solution-goals-constraints article,.solution-state-section article,
+  .experiment-overview article,.experiment-detail-grid>section{padding:22px 20px!important}
+  .solution-architecture-section,.solution-products-section,.solution-phases-section,.solution-risks-section,
+  .experiment-environment,.experiment-review,.dialog-positioning,.dialog-section,.dialog-two-col section{padding-left:20px!important;padding-right:20px!important}
+  .workflow-list{grid-template-columns:1fr 1fr}.workflow-list li{min-height:82px}
+}

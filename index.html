@@ -30,11 +30,11 @@
     <button class="menu-toggle" id="menuToggle" aria-label="展开导航" aria-expanded="false">☰</button>
     <a class="logo lab-logo" href="#home" data-route="home" aria-label="返回首页">
       <i>IT</i>
-      <span>Solution Lab<small>LEARN · BUILD · ARCHITECT</small></span>
+      <span>Solution Lab<small>学习 · 实践 · 架构</small></span>
     </a>
     <div class="top-context">
-      <span class="signal"><i></i> LAB ONLINE</span>
-      <span class="role-chip">Sangfor After-sales → Security Presales</span>
+      <span class="signal"><i></i> 站点运行中</span>
+      <span class="role-chip">深信服售后 → 安全售前</span>
     </div>
     <button id="theme" class="icon-button" aria-label="切换明暗主题" title="切换明暗主题">◐</button>
   </header>
@@ -105,10 +105,10 @@
             <p>从真实交付出发，逐步建立安全能力、售前思维与架构视角。</p>
           </div>
           <div class="journey-track">
-            <article class="done"><b>01</b><div><small>DELIVERY</small><h3>售后工程师</h3></div></article>
-            <article class="current"><b>02</b><div><small>SECURITY</small><h3>安全工程师</h3></div></article>
-            <article><b>03</b><div><small>PRESALES</small><h3>售前工程师</h3></div></article>
-            <article><b>04</b><div><small>ARCHITECTURE</small><h3>解决方案架构师</h3></div></article>
+            <article class="done"><b>01</b><div><small>交付</small><h3>售后工程师</h3></div></article>
+            <article class="current"><b>02</b><div><small>安全</small><h3>安全工程师</h3></div></article>
+            <article><b>03</b><div><small>售前</small><h3>售前工程师</h3></div></article>
+            <article><b>04</b><div><small>架构</small><h3>解决方案架构师</h3></div></article>
           </div>
         </section>
 
@@ -131,13 +131,9 @@
         <section class="home-section home-latest-labs">
           <div class="home-section-heading">
             <div><span>LATEST LAB RECORDS</span><h2>最新实验</h2></div>
-            <p>从当前实验框架中提取配置、验证和复盘记录，持续补全可复现证据。</p>
+            <p>直接展示实验中心已有记录，确保首页与能力看板使用同一份实践证据。</p>
           </div>
-          <div class="home-lab-list">
-            <article><div><small>综合实验</small><h3>企业出口安全模拟</h3></div><span class="lab-state active">进行中</span><button data-route="labs">查看详情</button></article>
-            <article><div><small>验证记录</small><h3>NAT 与访问策略验证</h3></div><span class="lab-state pending">待记录</span><button data-route="labs">查看详情</button></article>
-            <article><div><small>复盘记录</small><h3>日志分析与实验复盘</h3></div><span class="lab-state ready">模板已建立</span><button data-route="labs">查看详情</button></article>
-          </div>
+          <div class="home-lab-list" id="homeLabList"></div>
         </section>
 
         <section class="home-section home-updates">
@@ -363,7 +359,7 @@
   <dialog id="knowledgeDialog"><button class="x" id="knowledgeClose" aria-label="关闭">×</button><div id="knowledgeBody"></div></dialog>
   <dialog id="manualDialog"><button class="x" id="manualClose" aria-label="关闭">×</button><div id="manualBody"></div></dialog>
 
-  <footer class="site-footer"><div><b>IT Solution Lab</b><span>Learn · Build · Architect</span></div><p>个人学习实验室 · 持续建设中 · 2026</p></footer>
+  <footer class="site-footer"><div><b>IT Solution Lab</b><span>学习 · 实践 · 架构</span></div><p>个人学习实验室 · 持续建设中 · 2026</p></footer>
 
   <script src="app.js"></script>
   <script src="manuals.js"></script>
