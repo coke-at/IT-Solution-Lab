@@ -201,12 +201,12 @@
 
   const pageTitles = {
     home: 'IT Solution Lab · 工程师成长实验室',
-    technology: 'Technology Map · IT Solution Lab',
-    products: 'Product Lab · IT Solution Lab',
-    comparison: 'Vendor Comparison · IT Solution Lab',
-    solutions: 'Solution Center · IT Solution Lab',
-    labs: 'Lab 实验室 · IT Solution Lab',
-    dashboard: '成长 Dashboard · IT Solution Lab',
+    technology: '技术地图 · IT Solution Lab',
+    products: '产品实验室 · IT Solution Lab',
+    comparison: '厂商对比中心 · IT Solution Lab',
+    solutions: '解决方案中心 · IT Solution Lab',
+    labs: '实验中心 · IT Solution Lab',
+    dashboard: '成长能力看板 · IT Solution Lab',
     resources: '设备知识库 · IT Solution Lab'
   };
 
@@ -278,6 +278,30 @@
     };
   }
 
+  function getTechnologyDisplayStatus(domain) {
+    return ({ completed: '已完成', current: '学习中', planned: '未开始' })[domain.status] || domain.statusLabel || '未开始';
+  }
+
+  function getProductDisplayStatus(product) {
+    return product.status === '模板已建立' ? '学习中' : product.status;
+  }
+
+  function getProductEvidenceStatus(product) {
+    return product.status === '模板已建立' ? '学习模板已建立' : product.status;
+  }
+
+  function getLabDisplayStatus(status) {
+    return status === '待记录' ? '未开始' : status;
+  }
+
+  function getSolutionPhaseDisplayStatus(status) {
+    return ({ '结构已建立': '进行中', '待进一步补充': '未开始' })[status] || status;
+  }
+
+  function getArchitectureDisplayLabel(label) {
+    return ({ 'Internet / Branch': '互联网 / 分支接入', 'Core Network': '核心网络' })[label] || label;
+  }
+
   function renderHomeContent() {
     const directionGrid = document.querySelector('#homeDirectionGrid');
     const directionNames = { network: '网络', security: '安全', cloud: '云计算', solution: '解决方案架构' };
@@ -308,24 +332,47 @@
       homeLabList.innerHTML = labExperiments.length ? labExperiments.slice(0, 3).map(lab => `
         <article>
           <div><small>${lab.direction} · ${lab.type}</small><h3>${lab.name}</h3></div>
-          <span class="lab-state ${getLabStatusClass(lab.status)}">${lab.status}</span>
+          <span class="lab-state ${getLabStatusClass(lab.status)}">${getLabDisplayStatus(lab.status)}</span>
           <button data-experiment-open="${lab.id}">查看详情</button>
         </article>`).join('') : '<p class="home-lab-empty">当前还没有实验记录。</p>';
+    }
+
+    const updateList = document.querySelector('#homeUpdateList');
+    if (updateList) {
+      const featuredProduct = productLabs.find(product => product.id === 'af') || productLabs[0];
+      const latestLab = labExperiments[0];
+      const latestSolution = solutionCases[0];
+      const comparisonCount = vendorComparisons.length;
+      const updates = [
+        latestLab && { label: '实验中心', title: `${latestLab.name} · ${getLabDisplayStatus(latestLab.status)}`, attribute: `data-experiment-open="${latestLab.id}"` },
+        featuredProduct && { label: '产品实验室', title: `${featuredProduct.name} · ${getProductEvidenceStatus(featuredProduct)}`, attribute: `data-product-open="${featuredProduct.id}"` },
+        comparisonCount && { label: '厂商对比', title: `已整理 ${comparisonCount} 家厂商的选型分析`, attribute: 'data-route="comparison"' },
+        latestSolution && { label: '解决方案', title: `${latestSolution.name} · ${latestSolution.status}`, attribute: `data-solution-open="${latestSolution.id}"` }
+      ].filter(Boolean);
+      updateList.innerHTML = updates.map(item => `<button ${item.attribute}><span>${item.label}</span><b>${item.title}</b><i>查看</i></button>`).join('');
     }
   }
 
   function renderTechnologyMap() {
+    const stageFlow = document.querySelector('#technologyStageFlow');
+    if (stageFlow) {
+      const stages = [
+        { title: '基础能力', status: 'completed', label: '基础认知已建立' },
+        ...technologyDomains.map(domain => ({ title: domain.titleCn, status: domain.status, label: getTechnologyDisplayStatus(domain) }))
+      ];
+      stageFlow.innerHTML = stages.map((stage, index) => `<li class="${stage.status}"><b>${String(index + 1).padStart(2, '0')}</b><span>${stage.title}<small>${stage.label}</small></span></li>`).join('');
+    }
     const grid = document.querySelector('#technologyGrid');
     if (!grid) return;
     grid.innerHTML = technologyDomains.map((domain, index) => {
       const entryAttribute = domain.entryProduct ? `data-product-open="${domain.entryProduct}"` : `data-route="${domain.entryRoute}"`;
       return `
       <article class="technology-card tech-${domain.id} status-${domain.status}" id="technology-domain-${domain.id}" tabindex="-1">
-        <div class="tech-card-head"><i>${domain.code}</i><span>${String(index + 1).padStart(2, '0')} / DOMAIN</span><em>${domain.statusLabel}</em></div>
+        <div class="tech-card-head"><i>${domain.code}</i><span>${String(index + 1).padStart(2, '0')} / DOMAIN</span><em>${getTechnologyDisplayStatus(domain)}</em></div>
         <small>${domain.title}</small><h2>${domain.titleCn}</h2>
         <p>${domain.summary}</p>
-        <div class="domain-status"><span>能力自评</span><i><b style="--level:${domain.level}%"></b></i><strong>${domain.level}%</strong></div>
-        <div class="skill-chips">${domain.skills.map((skill, skillIndex) => `<span class="${skillIndex < Math.ceil(domain.skills.length * domain.level / 100) ? 'learned' : ''}">${skill}</span>`).join('')}</div>
+        <div class="domain-status domain-status-text"><span>学习阶段</span><strong>${getTechnologyDisplayStatus(domain)}</strong></div>
+        <div class="skill-chips">${domain.skills.map(skill => `<span>${skill}</span>`).join('')}</div>
         <button class="technology-entry" ${entryAttribute}><span>${domain.entryLabel}</span><b>→</b></button>
       </article>`;
     }).join('');
@@ -372,13 +419,12 @@
 
     technologyGrid.innerHTML = technologyDomains.map(domain => {
       const entryAttribute = domain.entryProduct ? `data-product-open="${domain.entryProduct}"` : dashboardRouteAttribute(domain.entryRoute);
-      const learnedSkills = Math.ceil(domain.skills.length * domain.level / 100);
       return `
         <article class="dashboard-technology-card status-${domain.status}">
-          <div class="dashboard-technology-head"><i>${domain.code}</i><div><small>${domain.title}</small><h3>${domain.titleCn}</h3></div><em>${domain.statusLabel}</em></div>
+          <div class="dashboard-technology-head"><i>${domain.code}</i><div><small>${domain.title}</small><h3>${domain.titleCn}</h3></div><em>${getTechnologyDisplayStatus(domain)}</em></div>
           <p>${domain.summary}</p>
-          <div class="dashboard-technology-progress"><span>自评进度</span><i><b style="--level:${domain.level}%"></b></i><strong>${domain.level}%</strong></div>
-          <div class="dashboard-skill-list">${domain.skills.map((skill, index) => `<span class="${index < learnedSkills ? 'learned' : ''}">${skill}</span>`).join('')}</div>
+          <div class="dashboard-technology-progress dashboard-technology-stage"><span>学习阶段</span><strong>${getTechnologyDisplayStatus(domain)}</strong></div>
+          <div class="dashboard-skill-list">${domain.skills.map(skill => `<span>${skill}</span>`).join('')}</div>
           <button class="dashboard-technology-entry" ${entryAttribute}>进入相关模块 <b>→</b></button>
         </article>`;
     }).join('');
@@ -392,11 +438,11 @@
     progressGrid.innerHTML = progress.map(item => `
       <article class="dashboard-progress-card"><div><i>${item.code}</i><span>${item.title}</span></div><b>${item.value}</b><p>${item.detail}</p><button ${dashboardRouteAttribute(item.route)}>查看记录 <b>→</b></button></article>`).join('');
 
-    const currentDomain = technologyDomains.find(domain => domain.status === 'current') || [...technologyDomains].sort((a, b) => a.level - b.level)[0];
+    const currentDomain = technologyDomains.find(domain => domain.status === 'current') || technologyDomains.find(domain => domain.status === 'planned') || technologyDomains[0];
     const activeLab = labExperiments.find(lab => lab.status !== '已完成');
     const improvingSolution = solutionCases.find(solution => solution.status !== '已完成');
     const suggestions = [
-      currentDomain && { label: '继续技术学习', title: `完善${currentDomain.titleCn}方向`, detail: `${currentDomain.statusLabel} · 当前自评 ${currentDomain.level}%`, route: 'technology' },
+      currentDomain && { label: '继续技术学习', title: `完善${currentDomain.titleCn}方向`, detail: `当前状态：${getTechnologyDisplayStatus(currentDomain)}`, route: 'technology' },
       activeLab && { label: '补齐实验证据', title: `完成“${activeLab.name}”的验证记录`, detail: `当前阶段：${activeLab.stage}`, route: 'labs' },
       improvingSolution && { label: '沉淀方案证据', title: `完善“${improvingSolution.name}”`, detail: `当前阶段：${improvingSolution.stage}`, route: 'solutions' }
     ].filter(Boolean);
@@ -526,7 +572,7 @@
     }
     grid.innerHTML = filteredLabs.map((lab, index) => `
       <article class="experiment-card">
-        <div class="experiment-card-index"><span>${String(index + 1).padStart(2, '0')} / LAB</span><em class="status-${getLabStatusClass(lab.status)}">${lab.status}</em></div>
+        <div class="experiment-card-index"><span>${String(index + 1).padStart(2, '0')} / LAB</span><em class="status-${getLabStatusClass(lab.status)}">${getLabDisplayStatus(lab.status)}</em></div>
         <div class="experiment-card-copy"><div class="experiment-meta"><span>${lab.direction}</span><i>${lab.type}</i></div><h3>${lab.name}</h3><p>${lab.summary}</p></div>
         <div class="experiment-card-action"><small>当前阶段</small><strong>${lab.stage}</strong><button data-experiment-open="${lab.id}">查看实验详情 <b>→</b></button></div>
       </article>`).join('');
@@ -535,10 +581,10 @@
   function labTopologyTemplate() {
     return `
       <div class="topology-canvas">
-        <div class="topo-node cloud"><i>WAN</i><b>Internet</b><small>203.0.113.0/24</small></div><span class="topo-line"><em>untrust</em></span>
-        <div class="topo-node firewall"><i>AF</i><b>Firewall</b><small>NAT · Policy · Log</small></div><span class="topo-line"><em>trust</em></span>
-        <div class="topo-node switch"><i>SW</i><b>Core Switch</b><small>VLAN 10 / 20</small></div><span class="topo-line split-line"><em>LAN</em></span>
-        <div class="topo-branches"><div class="topo-node small"><i>PC</i><b>Client</b></div><div class="topo-node small"><i>SRV</i><b>Server</b></div></div>
+        <div class="topo-node cloud"><i>WAN</i><b>互联网</b><small>203.0.113.0/24</small></div><span class="topo-line"><em>非信任区</em></span>
+        <div class="topo-node firewall"><i>AF</i><b>防火墙</b><small>NAT · 策略 · 日志</small></div><span class="topo-line"><em>信任区</em></span>
+        <div class="topo-node switch"><i>SW</i><b>核心交换</b><small>VLAN 10 / 20</small></div><span class="topo-line split-line"><em>局域网</em></span>
+        <div class="topo-branches"><div class="topo-node small"><i>PC</i><b>测试终端</b></div><div class="topo-node small"><i>SRV</i><b>业务服务器</b></div></div>
       </div>`;
   }
 
@@ -546,9 +592,9 @@
     const environment = lab.environment.map(item => `<span>${item}</span>`).join('');
     const skills = lab.skills.map(item => `<span>${item}</span>`).join('');
     const configuration = lab.configuration.map((item, index) => `<li><b>${String(index + 1).padStart(2, '0')}</b><span>${item}</span></li>`).join('');
-    const tests = lab.tests.map(item => `<div><span>${item.name}</span><b class="status-${getLabStatusClass(item.status)}">${item.status}</b></div>`).join('');
+    const tests = lab.tests.map(item => `<div><span>${item.name}</span><b class="status-${getLabStatusClass(item.status)}">${getLabDisplayStatus(item.status)}</b></div>`).join('');
     return `
-      <div class="experiment-dialog-head"><span>${lab.direction} / ${lab.type}</span><div><h2>${lab.name}</h2><em class="status-${getLabStatusClass(lab.status)}">${lab.status}</em></div><p>${lab.summary}</p><small>当前阶段 · ${lab.stage}</small></div>
+      <div class="experiment-dialog-head"><span>${lab.direction} / ${lab.type}</span><div><h2>${lab.name}</h2><em class="status-${getLabStatusClass(lab.status)}">${getLabDisplayStatus(lab.status)}</em></div><p>${lab.summary}</p><small>当前阶段 · ${lab.stage}</small></div>
       <section class="experiment-overview"><article><span>01 / 实验背景</span><h3>为什么进行这个实验？</h3><p>${lab.background}</p></article><article><span>02 / 实验目标</span><h3>需要验证什么？</h3><p>${lab.objective}</p></article></section>
       <section class="experiment-environment"><div class="experiment-section-title"><span>03 / 拓扑与环境</span><h3>建立可复现的实验边界</h3></div><div class="experiment-environment-meta"><div><small>实验环境</small>${environment}</div><div><small>关联技能</small>${skills}</div></div><div class="experiment-topology"><div class="board-head"><span>LAB TOPOLOGY</span><b>ENV / 001</b></div>${labTopologyTemplate()}</div></section>
       <div class="experiment-detail-grid"><section><div class="experiment-section-title"><span>04 / 配置步骤</span><h3>按顺序记录实施过程</h3></div><ol class="experiment-steps">${configuration}</ol></section><section><div class="experiment-section-title"><span>05 / 验证结果</span><h3>当前验证记录</h3></div><div class="experiment-tests">${tests}</div></section></div>
@@ -633,9 +679,9 @@
     }).join('');
     return `
       <div class="solution-architecture-flow">
-        <div class="solution-arch-node"><small>外部接入</small><b>${solution.architecture.ingress}</b></div><i></i>
+        <div class="solution-arch-node"><small>外部接入</small><b>${getArchitectureDisplayLabel(solution.architecture.ingress)}</b></div><i></i>
         <div class="solution-arch-node security"><small>安全边界</small><b>${security}</b></div><i></i>
-        <div class="solution-arch-node core"><small>业务核心</small><b>${solution.architecture.core}</b></div><i></i>
+        <div class="solution-arch-node core"><small>业务核心</small><b>${getArchitectureDisplayLabel(solution.architecture.core)}</b></div><i></i>
         <div class="solution-arch-branches">${services}</div>
       </div>`;
   }
@@ -654,7 +700,7 @@
     const problems = solution.problems.map(item => `<li>${item}</li>`).join('');
     const objectives = solution.objectives.map(item => `<li>${item}</li>`).join('');
     const constraints = solution.constraints.map(item => `<li>${item}</li>`).join('');
-    const phases = solution.phases.map((phase, index) => `<li><b>${String(index + 1).padStart(2, '0')}</b><div><strong>${phase.name}</strong><p>${phase.objective}</p><span>${phase.status}</span><small>主要交付物 · ${phase.deliverable}</small></div></li>`).join('');
+    const phases = solution.phases.map((phase, index) => `<li><b>${String(index + 1).padStart(2, '0')}</b><div><strong>${phase.name}</strong><p>${phase.objective}</p><span>${getSolutionPhaseDisplayStatus(phase.status)}</span><small>主要交付物 · ${phase.deliverable}</small></div></li>`).join('');
     const risks = solution.risks.map(item => `<li>${item}</li>`).join('');
     const nextSteps = solution.nextSteps.map(item => `<li>${item}</li>`).join('');
     const presalesChecks = solution.presalesChecks.map(item => `<li>${item}</li>`).join('');
@@ -666,7 +712,7 @@
       <section class="solution-products-section"><div class="solution-detail-title"><span>06 / 产品与能力组合</span><h3>产品选择必须对应客户问题</h3></div><div class="solution-product-references">${solutionProductsTemplate(solution)}</div></section>
       <section class="solution-phases-section"><div class="solution-detail-title"><span>07 / 建设阶段</span><h3>按顺序推进，不虚构项目日期</h3></div><ol class="solution-phase-list">${phases}</ol></section>
       <section class="solution-risks-section"><div class="solution-detail-title"><span>08 / 风险与边界</span><h3>当前方案不代表完成交付</h3></div><ul>${risks}</ul></section>
-      <section class="solution-state-section"><article><span>09 / 当前完成状态</span><h3>正在完善</h3><p>${solution.currentState}</p></article><article><span>10 / 后续完善方向</span><h3>下一步工作</h3><ol>${nextSteps}</ol><div class="solution-presales-check"><small>售前检查</small><ul>${presalesChecks}</ul></div></article></section>`;
+      <section class="solution-state-section"><article><span>09 / 当前完成状态</span><h3>${solution.status}</h3><p>${solution.currentState}</p></article><article><span>10 / 后续完善方向</span><h3>下一步工作</h3><ol>${nextSteps}</ol><div class="solution-presales-check"><small>售前检查</small><ul>${presalesChecks}</ul></div></article></section>`;
   }
 
   const solutionDialog = document.querySelector('#solutionDialog');
@@ -694,6 +740,12 @@
   }
 
   function renderProductLabs() {
+    const productCount = document.querySelector('#productStatCount');
+    const vendorCount = document.querySelector('#productStatVendors');
+    const categoryCount = document.querySelector('#productStatCategories');
+    if (productCount) productCount.textContent = productLabs.length;
+    if (vendorCount) vendorCount.textContent = new Set(productLabs.map(product => product.vendor)).size;
+    if (categoryCount) categoryCount.textContent = new Set(productLabs.map(getProductGroup)).size;
     const grid = document.querySelector('#productLabGrid');
     if (!grid) return;
     const filteredProducts = productLabs.filter(product => {
@@ -712,7 +764,7 @@
         <div class="product-card-head"><span>${product.vendor}</span><em>${getProductGroup(product)}</em></div>
         <div class="product-symbol">${product.name}</div>
         <small>${product.category}</small><h2>${product.name} · ${product.fullName}</h2><p>${product.positioning}</p>
-        <div class="product-progress"><i><b style="--level:${product.level}%"></b></i><span>${product.status} · ${product.level}%</span></div>
+        <div class="product-progress product-state"><span>${getProductDisplayStatus(product)} · ${getProductEvidenceStatus(product)}</span></div>
         <button data-product-open="${product.id}">进入产品实验室 <b>→</b></button>
       </article>`).join('');
   }
@@ -724,7 +776,7 @@
     const troubleMarkup = hasContent ? product.troubleshooting.map(item => `<li>${item}</li>`).join('') : '<li>常见问题与排查思路待补充</li>';
     const presalesMarkup = hasContent ? product.presales.map(item => `<li>${item}</li>`).join('') : '<li>客户需求、适用场景与选型问题待补充</li>';
     return `
-      <div class="lab-dialog-head"><span>${product.vendor} / PRODUCT LAB</span><div class="dialog-title"><i>${product.name}</i><div><h2>${product.fullName}</h2><p>${getProductGroup(product)} · ${product.category}</p></div></div><div class="dialog-progress"><span>${product.status}</span><i><b style="--level:${product.level}%"></b></i><em>${product.level}%</em></div></div>
+      <div class="lab-dialog-head"><span>${product.vendor} / PRODUCT LAB</span><div class="dialog-title"><i>${product.name}</i><div><h2>${product.fullName}</h2><p>${getProductGroup(product)} · ${product.category}</p></div></div><div class="dialog-progress product-state"><span>${getProductDisplayStatus(product)}</span><em>${getProductEvidenceStatus(product)}</em></div></div>
       <section class="dialog-positioning"><span>01 / 产品定位与适用场景</span><h3>解决什么问题？适合什么场景？</h3><p>${product.positioning}</p></section>
       <section class="dialog-section"><div class="dialog-section-title"><span>02 / 核心模块</span><h3>从能力结构理解产品</h3></div><div class="module-grid">${moduleMarkup}</div></section>
       <section class="dialog-section"><div class="dialog-section-title"><span>03 / 基础配置</span><h3>建立可重复的实施路径</h3></div><ol class="workflow-list">${workflowMarkup}</ol></section>
