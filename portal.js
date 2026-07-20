@@ -152,6 +152,9 @@
         { id: 'hci', reason: '整合计算、存储和虚拟网络，为业务资源交付和连续性规划提供承载平台。', problem: '基础设施分散运维', capability: '统一资源承载与运维' },
         { id: 'sip', reason: '汇聚边界、终端和其他安全数据，支撑告警研判、事件升级和复盘。', problem: '安全数据与处置分散', capability: '安全分析与运营协同' }
       ],
+      validationReferences: [
+        { labId: 'enterprise-egress-security', scope: '企业出口边界、NAT、安全策略与日志分析' }
+      ],
       phases: [
         { name: '规划', objective: '把客户问题映射为安全、访问、终端和基础设施能力范围', status: '结构已建立', deliverable: '需求边界、能力映射、产品引用与风险清单' },
         { name: '部署', objective: '按边界、访问、终端和基础设施依赖顺序组织实施与联调', status: '待进一步补充', deliverable: '实施步骤、回退条件、联调记录与验证证据' },
@@ -402,6 +405,67 @@
     return route ? `data-route="${route}"` : '';
   }
 
+  function getSolutionValidationLinks(solution) {
+    return (solution?.validationReferences || []).map(reference => ({
+      reference,
+      lab: getLabById(reference.labId)
+    }));
+  }
+
+  function getPresalesWorkflowStages(solution = solutionCases[0]) {
+    const productReferences = solution?.productReferences || [];
+    const validationLinks = getSolutionValidationLinks(solution);
+    const linkedLabs = validationLinks.filter(item => item.lab);
+    const deploymentPhase = solution?.phases?.find(phase => phase.name === '部署');
+    const validationNames = linkedLabs.map(item => item.lab.name).join('、');
+    const validationStates = [...new Set(linkedLabs.map(item => getLabDisplayStatus(item.lab.status)))].join('、');
+    const validationScopes = validationLinks.map(item => item.reference.scope).filter(Boolean).join('；');
+    return [
+      {
+        id: 'requirements', code: '01', title: '客户需求分析', status: solution ? '正在完善' : '未开始',
+        detail: solution ? `${solution.problems.length} 类客户问题与 ${solution.objectives.length} 项建设目标进入分析框架。` : '当前没有可引用的方案需求。',
+        evidence: '能力证据：问题清单、建设目标与约束条件', solutionId: solution?.id, actionLabel: '查看需求证据'
+      },
+      {
+        id: 'selection', code: '02', title: '技术选型', status: productReferences.length ? '学习中' : '未开始',
+        detail: `${productReferences.length} 项产品能力引用，并使用 ${vendorComparisons.length} 家厂商路线校验场景匹配。`,
+        evidence: '能力证据：产品能力映射与厂商对比矩阵', route: 'comparison', actionLabel: '查看选型矩阵'
+      },
+      {
+        id: 'design', code: '03', title: '方案设计', status: solution?.status || '未开始',
+        detail: solution?.architectureReady ? '逻辑架构结构已建立，具体边界仍需结合客户环境确认。' : '逻辑架构仍待建立。',
+        evidence: '能力证据：总体架构、产品组合与风险边界', solutionId: solution?.id, actionLabel: '查看方案结构'
+      },
+      {
+        id: 'validation', code: '04', title: '验证与实施规划', status: linkedLabs.length ? '验证准备' : '未开始',
+        detail: linkedLabs.length ? `已关联“${validationNames}”，实验状态实时读取为${validationStates}。` : '当前尚未关联实验验证内容。',
+        evidence: validationScopes ? `验证范围：${validationScopes}；实施规划：${deploymentPhase?.objective || '待补充'}` : '待验证项和实施规划需要继续补充',
+        route: 'labs', actionLabel: '查看验证准备'
+      }
+    ];
+  }
+
+  function getPresalesStatusClass(status) {
+    return ({ '未开始': 'pending', '学习中': 'learning', '正在完善': 'improving', '验证准备': 'validation', '已完成': 'completed' })[status] || 'neutral';
+  }
+
+  function renderPresalesWorkflow(containerId, solution = solutionCases[0]) {
+    const container = document.querySelector(`#${containerId}`);
+    if (!container) return;
+    const stages = getPresalesWorkflowStages(solution);
+    container.innerHTML = stages.map(stage => {
+      const action = stage.solutionId ? `data-solution-open="${stage.solutionId}"` : dashboardRouteAttribute(stage.route);
+      return `
+        <article class="presales-workflow-card status-${getPresalesStatusClass(stage.status)}" data-presales-stage="${stage.id}">
+          <div><b>${stage.code}</b><em>${stage.status}</em></div>
+          <h3>${stage.title}</h3>
+          <p>${stage.detail}</p>
+          <small>${stage.evidence}</small>
+          <button ${action}>${stage.actionLabel} <b>→</b></button>
+        </article>`;
+    }).join('');
+  }
+
   function renderDashboard() {
     const stats = getDashboardStats();
     const capabilityGrid = document.querySelector('#dashboardCapabilityGrid');
@@ -445,6 +509,8 @@
     ];
     progressGrid.innerHTML = progress.map(item => `
       <article class="dashboard-progress-card"><div><i>${item.code}</i><span>${item.title}</span></div><b>${item.value}</b><p>${item.detail}</p><button ${dashboardRouteAttribute(item.route)}>查看记录 <b>→</b></button></article>`).join('');
+
+    renderPresalesWorkflow('dashboardPresalesWorkflow');
 
     const currentDomain = technologyDomains.find(domain => domain.status === 'current') || technologyDomains.find(domain => domain.status === 'planned') || technologyDomains[0];
     const activeLab = labExperiments.find(lab => lab.status !== '已完成');
@@ -523,6 +589,7 @@
   function renderVendorComparisonCenter() {
     renderVendorComparisonFilters();
     renderVendorComparisonMatrix();
+    renderPresalesWorkflow('vendorPresalesWorkflow');
   }
 
   document.addEventListener('click', event => {
@@ -635,6 +702,10 @@
     return productLabs.find(product => product.id === id);
   }
 
+  function getLabById(id) {
+    return labExperiments.find(lab => lab.id === id);
+  }
+
   function renderSolutionStats() {
     const stats = document.querySelector('#solutionsStats');
     if (!stats) return;
@@ -704,6 +775,17 @@
     }).join('');
   }
 
+  function solutionValidationsTemplate(solution) {
+    const validationLinks = getSolutionValidationLinks(solution);
+    if (!validationLinks.length) return '<div class="solution-validation-empty">当前方案尚未关联实验验证内容。</div>';
+    return validationLinks.map(({ reference, lab }) => {
+      if (!lab) {
+        return `<article class="solution-validation-reference missing"><div><span>验证内容待关联</span><em>未开始</em></div><p>${reference.scope || '验证范围待补充'}</p><small>实验引用 · ${reference.labId}</small></article>`;
+      }
+      return `<article class="solution-validation-reference"><div><span>${lab.name}</span><em>${getLabDisplayStatus(lab.status)}</em></div><p>验证范围 · ${reference.scope}</p><small>实验阶段 · ${lab.stage}</small><button data-experiment-open="${lab.id}">查看验证准备 <b>→</b></button></article>`;
+    }).join('');
+  }
+
   function solutionDetailTemplate(solution) {
     const problems = solution.problems.map(item => `<li>${item}</li>`).join('');
     const objectives = solution.objectives.map(item => `<li>${item}</li>`).join('');
@@ -718,7 +800,7 @@
       <section class="solution-goals-constraints"><article><span>03 / 建设目标</span><h3>方案希望形成的能力</h3><ul>${objectives}</ul></article><article><span>04 / 需求与约束</span><h3>仍需确认的边界</h3><ul>${constraints}</ul></article></section>
       <section class="solution-architecture-section"><div class="solution-detail-title"><span>05 / 总体架构</span><h3>从接入、安全边界到业务与基础设施</h3></div><div class="solution-architecture-board"><div class="board-head"><span>SOLUTION ARCHITECTURE</span><b>LOGICAL VIEW</b></div>${solutionArchitectureTemplate(solution)}</div></section>
       <section class="solution-products-section"><div class="solution-detail-title"><span>06 / 产品与能力组合</span><h3>产品选择必须对应客户问题</h3></div><div class="solution-product-references">${solutionProductsTemplate(solution)}</div></section>
-      <section class="solution-phases-section"><div class="solution-detail-title"><span>07 / 建设阶段</span><h3>按顺序推进，不虚构项目日期</h3></div><ol class="solution-phase-list">${phases}</ol></section>
+      <section class="solution-phases-section"><div class="solution-detail-title"><span>07 / 验证与实施规划</span><h3>关联实验范围，规划实施顺序，不代表真实交付</h3></div><div class="solution-validation-references">${solutionValidationsTemplate(solution)}</div><ol class="solution-phase-list">${phases}</ol></section>
       <section class="solution-risks-section"><div class="solution-detail-title"><span>08 / 风险与边界</span><h3>当前方案不代表完成交付</h3></div><ul>${risks}</ul></section>
       <section class="solution-state-section"><article><span>09 / 当前完成状态</span><h3>${solution.status}</h3><p>${solution.currentState}</p></article><article><span>10 / 后续完善方向</span><h3>下一步工作</h3><ol>${nextSteps}</ol><div class="solution-presales-check"><small>售前检查</small><ul>${presalesChecks}</ul></div></article></section>`;
   }
@@ -737,6 +819,7 @@
     renderSolutionStats();
     renderSolutionFilters();
     renderSolutionCases();
+    renderPresalesWorkflow('solutionPresalesWorkflow');
   }
 
   const productFilterState = { vendor: '全部', category: '全部' };
