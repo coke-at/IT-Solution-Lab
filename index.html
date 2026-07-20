@@ -230,31 +230,30 @@
     </section>
 
     <section class="page" id="comparison" data-page="comparison">
-      <div class="page-frame">
-        <div class="page-heading">
-          <div><span>04 / VENDOR COMPARISON</span><h1>厂商路线对比</h1></div>
-          <p>不从参数表出发，而是先理解客户场景，再分析需求，最后讨论厂商与技术路线。</p>
+      <div class="page-frame vendor-comparison-page">
+        <div class="page-heading vendor-comparison-heading">
+          <div><span>04 / VENDOR COMPARISON</span><h1>厂商对比中心</h1><small>Vendor Comparison</small></div>
+          <p>售前不是比较谁绝对最好，而是分析客户场景、现网约束与技术路线之间的匹配关系。</p>
         </div>
-        <div class="comparison-flow" aria-label="厂商对比流程"><span class="active">01 客户场景</span><i>→</i><span>02 需求分析</span><i>→</i><span>03 技术路线</span><i>→</i><span>04 厂商选择</span></div>
-        <section class="scenario-card">
-          <div class="scenario-side">
-            <span>SCENARIO 001</span><h2>企业出口安全建设</h2><p>面向中型企业互联网出口，关注边界防护、业务发布、远程接入与统一审计。</p>
-            <div class="scenario-meta"><div><small>客户规模</small><b>500–2,000 人</b></div><div><small>核心目标</small><b>安全与可运营</b></div></div>
-          </div>
-          <div class="requirements-panel">
-            <div class="panel-title"><b>需求优先级</b><span>REQUIREMENT FIT</span></div>
-            <div class="requirement-row"><span>边界威胁防护</span><i><b style="--level:95%"></b></i><em>P0</em></div>
-            <div class="requirement-row"><span>策略与日志运营</span><i><b style="--level:86%"></b></i><em>P0</em></div>
-            <div class="requirement-row"><span>远程安全接入</span><i><b style="--level:70%"></b></i><em>P1</em></div>
-            <div class="requirement-row"><span>高可用与扩展</span><i><b style="--level:82%"></b></i><em>P1</em></div>
-          </div>
+        <section class="vendor-comparison-intro" aria-label="对比原则">
+          <span>COMPARISON PRINCIPLE</span>
+          <p>以下内容用于建立客观选型框架，不代表厂商排名。具体产品能力、版本、授权和适配结果仍需结合官方资料与客户环境验证。</p>
         </section>
-        <div class="vendor-fit-grid">
-          <article class="vendor-fit featured"><div class="fit-head"><span>深信服</span><b>AF</b></div><h3>适合重视安全运营与易用性的出口场景</h3><ul><li>一体化边界防护能力</li><li>策略、日志与安全运营联动</li><li>与 aTrust、EDR 等组合扩展</li></ul><div class="fit-note"><b>重点验证</b><span>实际吞吐、特性授权、日志留存与高可用方案</span></div></article>
-          <article class="vendor-fit"><div class="fit-head"><span>华为</span><b>Firewall</b></div><h3>适合网络体系完整、强调统一架构的场景</h3><ul><li>网络与安全产品体系协同</li><li>多层级边界与数据中心覆盖</li><li>适配大型网络建设方法</li></ul><div class="fit-note"><b>重点验证</b><span>现网技术栈、运维团队能力与方案复杂度</span></div></article>
-          <article class="vendor-fit muted-card"><div class="fit-head"><span>其他厂商</span><b>待研究</b></div><h3>保留场景化研究位置</h3><p>后续按奇安信、绿盟、天融信等技术路线逐步补充，不做无依据的简单参数罗列。</p><button class="ghost-button" disabled>对比模板已就绪</button></article>
+        <section class="vendor-comparison-filters" aria-label="厂商对比筛选">
+          <div class="vendor-comparison-filter-row"><span>厂商</span><div class="vendor-comparison-filter-options" id="comparisonVendorFilters"></div></div>
+          <div class="vendor-comparison-filter-row"><span>产品领域</span><div class="vendor-comparison-filter-options" id="comparisonDomainFilters"></div></div>
+        </section>
+        <div class="vendor-comparison-results-head">
+          <div><span>COMPARISON MATRIX</span><h2>售前选型对比矩阵</h2></div>
+          <p id="comparisonResultCount" aria-live="polite"></p>
         </div>
-        <div class="decision-note"><span>DECISION PRINCIPLE</span><p>没有“永远更好”的产品，只有在客户目标、现网约束、团队能力和预算边界下更匹配的选择。</p></div>
+        <div class="vendor-comparison-matrix" id="vendorComparisonMatrix"></div>
+        <section class="vendor-selection-method" aria-labelledby="vendorSelectionMethodTitle">
+          <div class="vendor-comparison-section-heading"><div><span>SELECTION METHOD</span><h2 id="vendorSelectionMethodTitle">售前选型方法</h2></div><p>先确认客户问题和约束，再判断技术能力与产品组合，避免从品牌或单一参数直接得出结论。</p></div>
+          <ol class="vendor-selection-flow">
+            <li><b>01</b><span>客户需求</span></li><li><b>02</b><span>技术能力</span></li><li><b>03</b><span>产品选择</span></li><li><b>04</b><span>方案组合</span></li>
+          </ol>
+        </section>
       </div>
     </section>
 
