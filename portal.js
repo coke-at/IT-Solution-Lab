@@ -321,6 +321,89 @@
     }).join('');
   }
 
+  function getDashboardStats() {
+    const completedDomains = technologyDomains.filter(domain => domain.status === 'completed').length;
+    const currentDomains = technologyDomains.filter(domain => domain.status === 'current').length;
+    const templateProducts = productLabs.filter(product => product.status === '模板已建立').length;
+    const completedLabs = labExperiments.filter(lab => lab.status === '已完成').length;
+    const activeLabs = labExperiments.filter(lab => lab.status === '进行中').length;
+    const architectureSolutions = solutionCases.filter(solution => solution.architectureReady).length;
+    const completedSolutions = solutionCases.filter(solution => solution.status === '已完成').length;
+    const vendorDomains = new Set(vendorComparisons.flatMap(vendor => vendor.domains));
+    return { completedDomains, currentDomains, templateProducts, completedLabs, activeLabs, architectureSolutions, completedSolutions, vendorDomains };
+  }
+
+  function dashboardRouteAttribute(route) {
+    return route ? `data-route="${route}"` : '';
+  }
+
+  function renderDashboard() {
+    const stats = getDashboardStats();
+    const capabilityGrid = document.querySelector('#dashboardCapabilityGrid');
+    const technologyGrid = document.querySelector('#dashboardTechnologyGrid');
+    const progressGrid = document.querySelector('#dashboardProgressGrid');
+    const nextList = document.querySelector('#dashboardNextList');
+    const evidenceChain = document.querySelector('#dashboardEvidenceChain');
+    if (!capabilityGrid || !technologyGrid || !progressGrid || !nextList || !evidenceChain) return;
+
+    const capabilities = [
+      { code: '01', title: '技术能力', value: `${stats.completedDomains}/${technologyDomains.length}`, detail: `${stats.currentDomains} 个方向正在学习`, evidence: '技术地图', route: 'technology' },
+      { code: '02', title: '产品能力', value: productLabs.length, detail: `${stats.templateProducts} 个模板已建立`, evidence: 'Product Lab', route: 'products' },
+      { code: '03', title: '实验能力', value: labExperiments.length, detail: `${stats.activeLabs} 个实验进行中`, evidence: 'Labs 实验记录', route: 'labs' },
+      { code: '04', title: '方案能力', value: solutionCases.length, detail: `${stats.architectureSolutions} 个方案已建立架构`, evidence: 'Solutions 模板', route: 'solutions' },
+      { code: '05', title: '选型能力', value: vendorComparisons.length, detail: `${stats.vendorDomains.size} 个产品领域已分析`, evidence: 'Vendor Comparison', route: 'comparison' }
+    ];
+    capabilityGrid.innerHTML = capabilities.map(item => `
+      <article class="dashboard-capability-card">
+        <div><span>${item.code}</span><small>${item.evidence}</small></div>
+        <h3>${item.title}</h3><b>${item.value}</b><p>${item.detail}</p>
+        <button ${dashboardRouteAttribute(item.route)}>查看已有证据 <b>→</b></button>
+      </article>`).join('');
+
+    technologyGrid.innerHTML = technologyDomains.map(domain => {
+      const entryAttribute = domain.entryProduct ? `data-product-open="${domain.entryProduct}"` : dashboardRouteAttribute(domain.entryRoute);
+      const learnedSkills = Math.ceil(domain.skills.length * domain.level / 100);
+      return `
+        <article class="dashboard-technology-card status-${domain.status}">
+          <div class="dashboard-technology-head"><i>${domain.code}</i><div><small>${domain.title}</small><h3>${domain.titleCn}</h3></div><em>${domain.statusLabel}</em></div>
+          <p>${domain.summary}</p>
+          <div class="dashboard-technology-progress"><span>自评进度</span><i><b style="--level:${domain.level}%"></b></i><strong>${domain.level}%</strong></div>
+          <div class="dashboard-skill-list">${domain.skills.map((skill, index) => `<span class="${index < learnedSkills ? 'learned' : ''}">${skill}</span>`).join('')}</div>
+          <button class="dashboard-technology-entry" ${entryAttribute}>进入相关模块 <b>→</b></button>
+        </article>`;
+    }).join('');
+
+    const progress = [
+      { code: 'P', title: '产品学习', value: productLabs.length, detail: `${stats.templateProducts} 个模板已建立`, route: 'products' },
+      { code: 'L', title: '实验记录', value: labExperiments.length, detail: `${stats.completedLabs} 个实验已完成`, route: 'labs' },
+      { code: 'S', title: '方案模板', value: solutionCases.length, detail: `${stats.completedSolutions} 个方案已完成`, route: 'solutions' },
+      { code: 'V', title: '厂商分析', value: vendorComparisons.length, detail: `${stats.vendorDomains.size} 个领域覆盖`, route: 'comparison' }
+    ];
+    progressGrid.innerHTML = progress.map(item => `
+      <article class="dashboard-progress-card"><div><i>${item.code}</i><span>${item.title}</span></div><b>${item.value}</b><p>${item.detail}</p><button ${dashboardRouteAttribute(item.route)}>查看记录 <b>→</b></button></article>`).join('');
+
+    const currentDomain = technologyDomains.find(domain => domain.status === 'current') || [...technologyDomains].sort((a, b) => a.level - b.level)[0];
+    const activeLab = labExperiments.find(lab => lab.status !== '已完成');
+    const improvingSolution = solutionCases.find(solution => solution.status !== '已完成');
+    const suggestions = [
+      currentDomain && { label: '继续技术学习', title: `完善${currentDomain.titleCn}方向`, detail: `${currentDomain.statusLabel} · 当前自评 ${currentDomain.level}%`, route: 'technology' },
+      activeLab && { label: '补齐实验证据', title: `完成“${activeLab.name}”的验证记录`, detail: `当前阶段：${activeLab.stage}`, route: 'labs' },
+      improvingSolution && { label: '沉淀方案证据', title: `完善“${improvingSolution.name}”`, detail: `当前阶段：${improvingSolution.stage}`, route: 'solutions' }
+    ].filter(Boolean);
+    nextList.innerHTML = suggestions.map((item, index) => `
+      <article class="dashboard-next-item"><span>${String(index + 1).padStart(2, '0')}</span><div><small>${item.label}</small><h3>${item.title}</h3><p>${item.detail}</p></div><button ${dashboardRouteAttribute(item.route)} aria-label="${item.title}">进入 <b>→</b></button></article>`).join('');
+
+    const evidence = [
+      { code: '01', title: '技术能力', detail: `${stats.completedDomains} 个方向已完成阶段，${stats.currentDomains} 个方向正在学习`, route: 'technology', label: '技术地图' },
+      { code: '02', title: '产品能力', detail: `${productLabs.length} 个产品模板，其中 ${stats.templateProducts} 个已建立模板`, route: 'products', label: 'Product Lab' },
+      { code: '03', title: '实验能力', detail: `${labExperiments.length} 条实验记录，${stats.completedLabs} 个已完成`, route: 'labs', label: 'Labs' },
+      { code: '04', title: '方案能力', detail: `${solutionCases.length} 个方案模板，${stats.architectureSolutions} 个已建立架构`, route: 'solutions', label: 'Solutions' },
+      { code: '05', title: '选型能力', detail: `${vendorComparisons.length} 家厂商分析，覆盖 ${stats.vendorDomains.size} 个产品领域`, route: 'comparison', label: 'Vendor Comparison' }
+    ];
+    evidenceChain.innerHTML = evidence.map(item => `
+      <li><div class="dashboard-evidence-index"><span>${item.code}</span><i></i></div><div class="dashboard-evidence-copy"><small>${item.label}</small><h3>${item.title}</h3><p>${item.detail}</p></div><button ${dashboardRouteAttribute(item.route)}>查看 <b>→</b></button></li>`).join('');
+  }
+
   const vendorComparisonFilterState = { vendor: '全部', domain: '全部' };
 
   function renderVendorComparisonFilters() {
@@ -749,6 +832,7 @@
 
   renderHomeContent();
   renderTechnologyMap();
+  renderDashboard();
   renderVendorComparisonCenter();
   renderSolutionsCenter();
   renderLabCenter();

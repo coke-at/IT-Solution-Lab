@@ -302,26 +302,31 @@
     </section>
 
     <section class="page" id="dashboard" data-page="dashboard">
-      <div class="page-frame">
-        <div class="page-heading">
-          <div><span>07 / GROWTH DASHBOARD</span><h1>个人成长 Dashboard</h1></div>
-          <p>用学习进度和作品证据记录成长。当前数值为自评基线，后续由实验、产品笔记和方案案例持续更新。</p>
+      <div class="page-frame dashboard-growth-page">
+        <div class="page-heading dashboard-growth-heading">
+          <div><span>07 / GROWTH DASHBOARD</span><h1>成长能力看板</h1><small>Growth Dashboard</small></div>
+          <p>聚合技术学习、产品模板、实验记录、方案设计与厂商分析，展示工程能力如何从知识逐步形成可检查的证据。</p>
         </div>
-        <div class="dashboard-metrics"><article><span>技术域</span><b>4</b><small>Network · Security · Cloud · Solution</small></article><article><span>产品模板</span><b>6</b><small>基础模板已建立 · 持续深化</small></article><article><span>实验记录</span><b>1</b><small>进行中的实践框架</small></article><article><span>方案案例</span><b>1</b><small>首个模板案例</small></article></div>
-        <div class="dashboard-grid">
-          <section class="skill-panel">
-            <div class="panel-title"><div><span>SKILL LEVEL</span><h2>当前技能等级</h2></div><small>SELF ASSESSMENT / 100</small></div>
-            <div class="skill-row"><div><i>N</i><span><b>Network</b><small>TCP/IP · Routing · VPN</small></span></div><strong>64</strong><em><b style="--level:64%"></b></em></div>
-            <div class="skill-row"><div><i>S</i><span><b>Security</b><small>Firewall · Zero Trust · SOC</small></span></div><strong>72</strong><em><b style="--level:72%"></b></em></div>
-            <div class="skill-row"><div><i>C</i><span><b>Cloud</b><small>HCI · Virtualization · Backup</small></span></div><strong>43</strong><em><b style="--level:43%"></b></em></div>
-            <div class="skill-row"><div><i>A</i><span><b>Solution</b><small>Scenario · Design · Selection</small></span></div><strong>35</strong><em><b style="--level:35%"></b></em></div>
-          </section>
-          <section class="growth-panel">
-            <div class="panel-title"><div><span>CAREER MILESTONE</span><h2>成长阶段</h2></div><small>STEP 02 / 04</small></div>
-            <div class="vertical-journey"><article class="done"><i></i><div><span>已积累</span><h3>售后交付与排障经验</h3><p>真实环境、变更风险、问题定界</p></div></article><article class="current"><i></i><div><span>正在建设</span><h3>安全技术体系</h3><p>产品能力、攻击面、运营方法</p></div></article><article><i></i><div><span>下一阶段</span><h3>售前方案能力</h3><p>调研、设计、选型、表达</p></div></article><article><i></i><div><span>长期目标</span><h3>Solution Architect</h3><p>业务与技术的端到端连接</p></div></article></div>
-          </section>
-        </div>
-        <section class="evidence-strip"><div><span>EVIDENCE MODEL</span><h2>让每一格进度都有作品支撑</h2></div><div class="evidence-items"><span>产品笔记 <b>→</b> Product Lab</span><span>动手验证 <b>→</b> Lab</span><span>场景分析 <b>→</b> Comparison</span><span>方案表达 <b>→</b> Solution Center</span></div></section>
+        <section class="dashboard-section dashboard-overview-section" aria-labelledby="dashboardOverviewTitle">
+          <div class="dashboard-section-heading"><div><span>CAPABILITY OVERVIEW</span><h2 id="dashboardOverviewTitle">能力总览</h2></div><p>只展示已有模块中可以核对的状态，不把记录数量等同于能力完成度。</p></div>
+          <div class="dashboard-capability-grid" id="dashboardCapabilityGrid"></div>
+        </section>
+        <section class="dashboard-section dashboard-technology-section" aria-labelledby="dashboardTechnologyTitle">
+          <div class="dashboard-section-heading"><div><span>TECHNOLOGY GROWTH</span><h2 id="dashboardTechnologyTitle">技术成长地图</h2></div><p>复用技术地图中的能力自评、学习状态和技能范围。</p></div>
+          <div class="dashboard-technology-grid" id="dashboardTechnologyGrid"></div>
+        </section>
+        <section class="dashboard-section dashboard-progress-section" aria-labelledby="dashboardProgressTitle">
+          <div class="dashboard-section-heading"><div><span>LEARNING PROGRESS</span><h2 id="dashboardProgressTitle">学习进度</h2></div><p>统计来自 Product Lab、Labs、Solutions 与 Vendor Comparison 的现有记录。</p></div>
+          <div class="dashboard-progress-grid" id="dashboardProgressGrid"></div>
+        </section>
+        <section class="dashboard-section dashboard-next-section" aria-labelledby="dashboardNextTitle">
+          <div class="dashboard-section-heading"><div><span>NEXT ACTION</span><h2 id="dashboardNextTitle">下一步建议</h2></div><p>依据当前学习状态和未完成记录生成简单行动建议，不使用复杂 AI。</p></div>
+          <div class="dashboard-next-list" id="dashboardNextList"></div>
+        </section>
+        <section class="dashboard-section dashboard-evidence-section" aria-labelledby="dashboardEvidenceTitle">
+          <div class="dashboard-section-heading"><div><span>CAPABILITY EVIDENCE CHAIN</span><h2 id="dashboardEvidenceTitle">能力证据链</h2></div><p>从知识到选型，每一级能力都由已有内容承接，不新增 Mock 证据。</p></div>
+          <ol class="dashboard-evidence-chain" id="dashboardEvidenceChain"></ol>
+        </section>
       </div>
     </section>
 
